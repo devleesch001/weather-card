@@ -1,9 +1,29 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 import ApiIndex from './api/index';
+import User from '~/models/User';
+
+run().catch((err) => console.log(err));
+
+async function run() {
+    await mongoose.connect('mongodb://root:example@127.0.0.1:27017');
+
+    const user = new User({
+        username: 'Bill',
+        email: 'bill@initech.com',
+        password: 'password',
+    });
+    await user.save();
+
+    console.log(user.email); // 'bill@initech.com'
+
+    const userFromDb = await User.findOne({ email: 'bill@initech.com' }).exec();
+
+    console.log(userFromDb);
+}
 
 dotenv.config();
 

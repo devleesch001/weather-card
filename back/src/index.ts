@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
+
 import dotenv from 'dotenv';
 
 import ApiIndex from './api/index';
@@ -6,6 +8,8 @@ import ApiIndex from './api/index';
 dotenv.config();
 
 const app = express();
+app.use(cors());
+
 const port = process.env.PORT;
 
 app.get('/', (req: Request, res: Response) => {

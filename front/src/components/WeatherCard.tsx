@@ -8,9 +8,15 @@ import AirIcon from '@mui/icons-material/Air';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import CloudIcon from '@mui/icons-material/Cloud';
+import { getWeather, WeatherInterface } from '../api/weather';
 
 function WeatherCard() {
-    const [weather, setWeather] = React.useState(0); //Hoock
+    const [weather, setWeather] = React.useState<WeatherInterface | null>(null); //Hoock
+
+    getWeather('paris').then((r) => {
+        const data = r.data as WeatherInterface;
+        setWeather(data);
+    });
 
     return (
         <Card>

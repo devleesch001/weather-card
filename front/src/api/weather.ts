@@ -2,48 +2,48 @@ import axios from 'axios';
 
 const API_URL = 'http://10.3.2.54:8080/api';
 
-export interface WeatherInterface {
+export interface WeatherDataInterface {
     coord: {
-        lon: 2.32;
-        lat: 48.8589;
+        lon: number;
+        lat: number;
     };
-    weather: [
-        {
-            id: 701;
-            main: 'Mist';
-            description: 'mist';
-            icon: '50n';
-        }
-    ];
+    weather: WeatherInterface[];
     base: 'stations';
     main: {
-        temp: 280.51;
-        feels_like: 276.8;
-        temp_min: 279.8;
-        temp_max: 281.34;
-        pressure: 992;
-        humidity: 95;
+        temp: number;
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        humidity: number;
     };
-    visibility: 2900;
+    visibility: number;
     wind: {
-        speed: 6.69;
-        deg: 150;
+        speed: number;
+        deg: number;
     };
     clouds: {
-        all: 100;
+        all: number;
     };
-    dt: 1669046921;
+    dt: number;
     sys: {
-        type: 2;
-        id: 2012208;
-        country: 'FR';
-        sunrise: 1669014525;
-        sunset: 1669046681;
+        type: number;
+        id: number;
+        country: string;
+        sunrise: number;
+        sunset: number;
     };
-    timezone: 3600;
-    id: 6545270;
-    name: 'Palais-Royal';
-    cod: 200;
+    timezone: number;
+    id: number;
+    name: string;
+    cod: number;
+}
+
+export interface WeatherInterface {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
 }
 
 export const getWeather = (search: string) => {

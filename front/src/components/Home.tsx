@@ -5,11 +5,15 @@ import WeatherhGrid from './WeatherGrid';
 import Login from './Login'; //bouton menu
 
 function Home() {
+    const [openLoginModal, setOpenLoginModal] = React.useState(false);
+    const handleOpenLoginModal = () => setOpenLoginModal(true);
+    const handleCloseLoginModal = () => setOpenLoginModal(false);
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <MenuAppBar></MenuAppBar>
-            <WeatherhGrid></WeatherhGrid>
-            {/*<Login></Login>*/}
+            <MenuAppBar handleLoginModalOpen={handleOpenLoginModal} />
+            <WeatherhGrid />
+            <Login open={openLoginModal} handleClose={handleCloseLoginModal} />
         </Box>
     );
 }

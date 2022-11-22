@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Home from './components/Home';
+import { setAuthToken } from './services/AuthentificationService';
 
 function App() {
-    const [maVariable, setMaVariable] = useState<string | null>(null);
-    const maVariableHandler = () => {
-        setMaVariable("c'est moi");
-    };
+    const token = localStorage.getItem('token');
+    if (token) {
+        setAuthToken(token);
+    }
 
     return (
         <div className="App">
             <Home></Home>
-            <p>maVariable</p>
-            <p>{maVariable}</p>
         </div>
     );
 }

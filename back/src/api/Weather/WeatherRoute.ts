@@ -1,5 +1,5 @@
 import { Request, Router } from 'express';
-import { geoCode, getWeather } from '~/services/openWeatherMap';
+import { geoCode, getWeather } from '~/services/openWeatherMapService';
 
 const router = Router();
 

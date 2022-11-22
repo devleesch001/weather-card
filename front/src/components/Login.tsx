@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as AuthService from '~/services/AuthentificationService';
+import * as AuthService from '../services/AuthentificationService';
 
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -36,7 +36,15 @@ const LoginForm: React.FC = () => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        // AuthService.login(data.get('email'), data.get('password'))
+        const email = data.get('email')?.toString();
+        const password = data.get('password')?.toString();
+
+        if (!email || !password) return;
+
+        AuthService.login(email, password).then((r) => {
+            const token = r.data.token;
+            AuthService.setAuthToken(token);
+        });
     };
 
     const formName = 'Sign In';
@@ -81,9 +89,16 @@ const RegisterForm: React.FC = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
+
+        const username = data.get('username')?.toString();
+        const email = data.get('email')?.toString();
+        const password = data.get('password')?.toString();
+
+        if (!username || !email || !password) return;
+
+        AuthService.register(username, email, password).then((r) => {
+            const token = r.data.token;
+            AuthService.setAuthToken(token);
         });
     };
 

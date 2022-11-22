@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const API_URL = process.env.REACT_APP_API_URL ?? 'http://localhost:8080';
+
 export const setAuthToken = (token: string) => {
     localStorage.setItem('token', token);
 
@@ -11,12 +13,9 @@ export const setAuthToken = (token: string) => {
 };
 
 export const register = (username: string, email: string, password: string) => {
-    return axios.post('/api/user', { email: email, username: username, password: password });
+    return axios.post(`${API_URL}/api/user`, { email: email, username: username, password: password });
 };
 
 export const login = (email: string, password: string) => {
-    axios.post('/api/login', { email: email, password: password }).then((r) => {
-        const token = r.data.token;
-        setAuthToken(token);
-    });
+    return axios.post(`${API_URL}/api/login`, { email: email, password: password });
 };

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as AuthService from '~/services/AuthentificationService';
 
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -34,10 +35,8 @@ const LoginForm: React.FC = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        // AuthService.login(data.get('email'), data.get('password'))
     };
 
     const formName = 'Sign In';

@@ -9,7 +9,13 @@ import { Box, Menu, MenuItem } from '@mui/material';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-const MenuAppBar: React.FC = () => {
+interface MenuAppBarInterface {
+    handleLoginModalOpen(): void;
+}
+
+const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
+    const { handleLoginModalOpen } = Props;
+
     const menuId = 'primary-search-account-menu';
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -39,7 +45,14 @@ const MenuAppBar: React.FC = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+            <MenuItem
+                onClick={() => {
+                    handleMenuClose();
+                    handleLoginModalOpen();
+                }}
+            >
+                Profile
+            </MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
         </Menu>
     );

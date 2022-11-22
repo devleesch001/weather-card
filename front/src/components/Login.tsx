@@ -1,14 +1,36 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
+
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
-function Login() {
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Modal from '@mui/material/Modal';
+
+import Typography from '@mui/material/Typography';
+
+import LoginIcon from '@mui/icons-material/Login';
+import RegisterIcon from '@mui/icons-material/ExitToApp';
+
+const style = {
+    position: 'absolute' as const,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+};
+
+interface LoginProps {
+    open: boolean;
+
+    handleClose(): void;
+}
+
+const LoginForm: React.FC = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -18,48 +40,132 @@ function Login() {
         });
     };
 
+    const formName = 'Sign In';
+
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
-                    <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                        Sign In
-                    </Button>
-                </Box>
+        <Box alignItems={'center'} flexDirection={'column'} padding={5}>
+            <Typography component="h1" variant="h5">
+                {formName}
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    type="email"
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                />
+                <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    {formName}
+                </Button>
             </Box>
-        </Container>
+        </Box>
     );
-}
+};
+
+const RegisterForm: React.FC = () => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        console.log({
+            email: data.get('email'),
+            password: data.get('password'),
+        });
+    };
+
+    const formName = 'Sign Up';
+
+    return (
+        <Box alignItems={'center'} flexDirection={'column'} padding={5}>
+            <Typography component="h1" variant="h5">
+                {formName}
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    type="email"
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    type="text"
+                    id="email"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                />
+                <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    {formName}
+                </Button>
+            </Box>
+        </Box>
+    );
+};
+
+const Login: React.FC<LoginProps> = (Props) => {
+    const { open, handleClose } = Props;
+    const [value, setValue] = React.useState(0);
+
+    return (
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="login-modal-title"
+            aria-describedby="login-modal-description"
+        >
+            <Box sx={style}>
+                <Paper>
+                    <Paper elevation={3}>
+                        <BottomNavigation
+                            showLabels
+                            value={value}
+                            onChange={(event, newValue) => {
+                                setValue(newValue);
+                            }}
+                        >
+                            <BottomNavigationAction label="Login" icon={<LoginIcon />} />
+                            <BottomNavigationAction label="Register" icon={<RegisterIcon />} />
+                        </BottomNavigation>
+                    </Paper>
+                    {value === 0 ? <LoginForm /> : <RegisterForm />}
+                </Paper>
+            </Box>
+        </Modal>
+    );
+};
 export default React.memo(Login);

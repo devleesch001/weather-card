@@ -9,68 +9,108 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import CloudIcon from '@mui/icons-material/Cloud';
 import { getWeather, WeatherDataInterface, WeatherInterface } from '../api/weather';
-import { Typography } from '@mui/material';
+import { CardHeader, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+
+import * as Compass from 'cardinal-direction';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
     weatherId: number;
-    temp: number;
-    tempMin: number;
-    tempMax: number;
+    temp: {
+        temperature: number;
+        tempFeel: number;
+        tempMin: number;
+        tempMax: number;
+    };
     humidity: number;
-    windSpeed: number;
+    wind: {
+        speed: number;
+        angle: number;
+        gust?: number;
+    };
 }
 
-function ActionOnWeatherInterface(weatherData: WeatherDataInterface): WeatherInfoInterface {
+function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoInterface {
     const weatherInfo: WeatherInfoInterface = {
-        weatherId: weatherData.weather[0].id,
-        temp: weatherData.main.temp - 273.15,
-        tempMin: weatherData.main.temp_min - 273.15,
-        tempMax: weatherData.main.temp_max - 273.15,
+        weatherId: weatherData.weather[0].id ?? 0,
+        temp: {
+            temperature: weatherData.main.temp,
+            tempFeel: weatherData.main.feels_like,
+            tempMin: weatherData.main.temp_min,
+            tempMax: weatherData.main.temp_max,
+        },
+        wind: {
+            speed: weatherData.wind.speed,
+            angle: weatherData.wind.deg,
+            gust: weatherData.wind.gust,
+        },
         humidity: weatherData.main.humidity,
-        windSpeed: weatherData.wind.speed,
     };
 
     return weatherInfo;
 }
 
 function WeatherCard() {
-    const [weather, setWeather] = React.useState<WeatherDataInterface | null>(null); //Hoock
+    const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null); //Hoock
 
     React.useEffect(() => {
         getWeather('paris').then((r) => {
             const data = r.data as WeatherDataInterface;
-
-            setWeather(data);
+            const weatherInfo = toWeatherInfoInterface(data);
+            setWeather(weatherInfo);
         });
     }, []);
 
     return (
-        <Card>
-            <CardContent>
-                {weather ? (
-                    weather.weather[0].id >= 200 && weather.weather[0].id <= 232 ? (
-                        <ThunderstormIcon></ThunderstormIcon> //orage
-                    ) : weather.weather[0].id >= 300 && weather.weather[0].id <= 321 ? (
-                        <ThunderstormIcon></ThunderstormIcon> //bruine modif icone
-                    ) : weather.weather[0].id >= 500 && weather.weather[0].id <= 531 ? (
-                        <ThunderstormIcon></ThunderstormIcon> //pluie legere
-                    ) : weather.weather[0].id >= 600 && weather.weather[0].id <= 622 ? (
-                        <AcUnitIcon></AcUnitIcon> // neige
-                    ) : weather.weather[0].id >= 701 && weather.weather[0].id <= 781 ? (
-                        <ThunderstormIcon></ThunderstormIcon> // brouillard
-                    ) : weather.weather[0].id == 800 ? (
-                        <WbSunnyIcon></WbSunnyIcon> //soleil
-                    ) : weather.weather[0].id >= 801 && weather.weather[0].id <= 804 ? (
-                        <CloudIcon></CloudIcon>
-                    ) : (
-                        <></>
-                    )
-                ) : (
-                    <>no data</>
-                )}
-            </CardContent>
-        </Card>
+        <>
+            <a></a>
+            <a />
+            {weather ? (
+                <Card>
+                    <CardHeader
+                        title={
+                            weather.weatherId >= 200 && weather.weatherId <= 232 ? (
+                                <ThunderstormIcon /> //orage
+                            ) : weather.weatherId >= 300 && weather.weatherId <= 321 ? (
+                                <ThunderstormIcon /> //bruine modif icone
+                            ) : weather.weatherId >= 500 && weather.weatherId <= 531 ? (
+                                <ThunderstormIcon /> //pluie legere
+                            ) : weather.weatherId >= 600 && weather.weatherId <= 622 ? (
+                                <AcUnitIcon /> // neige
+                            ) : weather.weatherId >= 701 && weather.weatherId <= 781 ? (
+                                <ThunderstormIcon /> // brouillard
+                            ) : weather.weatherId == 800 ? (
+                                <WbSunnyIcon /> //soleil
+                            ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
+                                <CloudIcon />
+                            ) : (
+                                <>no data</>
+                            )
+                        }
+                    />
+                    <CardContent>
+                        <Typography>{(weather.temp.temperature - 273.15).toPrecision(3)}°C</Typography>
+                        <Typography>ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C </Typography>
+                        <Typography>
+                            Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C -- Max:{' '}
+                            {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
+                        </Typography>
+                        <AirIcon></AirIcon>
+                        <Typography>{(weather.wind.speed * 3.6).toPrecision(3)} km/H</Typography>
+                        <Typography>{Compass.degreeFromCardinal(weather.wind.angle)} </Typography>
+                        {weather.wind.gust ? (
+                            <Typography>{(weather.wind.gust * 3.6).toPrecision(3)} km/H</Typography>
+                        ) : (
+                            <></>
+                        )}
+                        <Typography>Humidity : {weather.humidity} % </Typography>
+                    </CardContent>
+                </Card>
+            ) : (
+                <></>
+            )}
+        </>
     );
 }
 export default React.memo(WeatherCard);

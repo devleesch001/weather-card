@@ -2,20 +2,21 @@ import * as React from 'react';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-//import meteo
-import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
-import AirIcon from '@mui/icons-material/Air';
-import WbSunnyIcon from '@mui/icons-material/WbSunnyTwoTone';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-import CloudIcon from '@mui/icons-material/Cloud';
-import { getWeather, WeatherDataInterface, WeatherInterface } from '../api/weather';
+import { getWeather, WeatherDataInterface } from '../api/weather';
 import { CardHeader, Grid, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
-import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
 
-import * as Compass from 'cardinal-direction';
+//import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
+
 import { grey, yellow } from '@mui/material/colors';
-import { AcUnitTwoTone, AirTwoTone, CloudTwoTone, ThunderstormTwoTone, WbSunnyTwoTone } from '@mui/icons-material';
+import {
+    AcUnitTwoTone,
+    AirTwoTone,
+    CloudTwoTone,
+    ThunderstormTwoTone,
+    WbSunnyTwoTone,
+    WaterTwoTone,
+} from '@mui/icons-material';
+import { cardinalPoint, cardinalIntFromDegree } from '../services/Compass';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -127,7 +128,7 @@ function WeatherCard() {
                                 </Typography>
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 30 }}>
-                                        {Compass.degreeFromCardinal(weather.wind.angle)}
+                                        {cardinalPoint(cardinalIntFromDegree(weather.wind.angle))}
                                     </span>
                                 </Typography>
                                 {weather.wind.gust ? (
@@ -152,7 +153,7 @@ function WeatherCard() {
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
-                                <WaterTwoToneIcon sx={{ color: 'blue', fontSize: 100, position: 'central' }} />
+                                <WaterTwoTone sx={{ color: 'blue', fontSize: 100, position: 'central' }} />
                             </Grid>
                         </Grid>
                     </CardContent>

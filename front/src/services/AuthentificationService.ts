@@ -27,3 +27,8 @@ export const login = (email: string, password: string) => {
 export const logout = () => {
     return localStorage.removeItem('token');
 };
+
+export interface UserInformationInterface {
+    username: string;
+    email: string;
+}

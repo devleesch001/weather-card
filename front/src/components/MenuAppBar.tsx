@@ -1,22 +1,64 @@
 import React, { useState, MouseEvent, useEffect } from 'react';
+import * as AuthService from '../services/AuthentificationService';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-import { Box, Menu, MenuItem } from '@mui/material';
+import { alpha, Box, InputBase, Menu, MenuItem, styled } from '@mui/material';
+import Button from '@mui/material/Button';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import * as AuthService from '../services/AuthentificationService';
-import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
+    },
+}));
 
 interface MenuAppBarInterface {
     handleLoginModalOpen(): void;
+    handleProfileModalOpen(): void;
 }
 
 const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
-    const { handleLoginModalOpen } = Props;
+    const { handleLoginModalOpen, handleProfileModalOpen } = Props;
 
     const menuId = 'primary-search-account-menu';
 
@@ -56,12 +98,11 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
             <MenuItem
                 onClick={() => {
                     handleMenuClose();
-                    handleLoginModalOpen();
+                    handleProfileModalOpen();
                 }}
             >
                 Profile
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             <MenuItem
                 onClick={() => {
                     handleMenuClose();
@@ -77,12 +118,28 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
         <AppBar position="static">
             <Toolbar>
                 <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                    <MenuIcon />
+                    <WbSunnyIcon />
                 </IconButton>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    News
+                <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                    METEO
                 </Typography>
-                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                        placeholder="Search…"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                const target = e.target as HTMLInputElement;
+                                console.log(target.value);
+                            }
+                        }}
+                        inputProps={{ 'aria-label': 'search' }}
+                    />
+                </Search>
+                <Box sx={{ flexGrow: 1 }} />
+                <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
                     {connected ? (
                         <IconButton
                             size="large"

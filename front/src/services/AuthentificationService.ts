@@ -17,11 +17,11 @@ export const getAuthToken = (): string | null => {
 };
 
 export const register = (username: string, email: string, password: string) => {
-    return axios.post(`${API_URL}/api/user`, { email: email, username: username, password: password });
+    return axios.post(`${API_URL}/api/auth/register`, { email: email, username: username, password: password });
 };
 
 export const login = (email: string, password: string) => {
-    return axios.post(`${API_URL}/api/login`, { email: email, password: password });
+    return axios.post(`${API_URL}/api/auth/login`, { email: email, password: password });
 };
 
 export const logout = () => {

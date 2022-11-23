@@ -1,9 +1,10 @@
 import * as React from 'react';
+import logo from '../assets/WeatherAppLogo.gif';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { getWeather, WeatherDataInterface } from '../api/weather';
-import { CardHeader, Grid, Typography } from '@mui/material';
+import { CardHeader, CardMedia, Grid, Typography } from '@mui/material';
 
 //import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
 
@@ -55,11 +56,15 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
     return weatherInfo;
 }
 
-function WeatherCard() {
+interface WeatherCardProps {
+    stationName: string;
+}
+const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
+    const { stationName } = Props;
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null); //Hoock
 
     React.useEffect(() => {
-        getWeather('paris').then((r) => {
+        getWeather(stationName).then((r) => {
             const data = r.data as WeatherDataInterface;
             const weatherInfo = toWeatherInfoInterface(data);
             setWeather(weatherInfo);
@@ -70,7 +75,7 @@ function WeatherCard() {
         <>
             {weather ? (
                 <Card>
-                    <CardHeader title="nom de la ville" />
+                    <CardHeader>title={stationName}</CardHeader>
                     <CardContent>
                         <Grid container spacing={1} justifyContent="center" alignItems="center">
                             <Grid item xs={6} style={{ placeItems: 'center' }}>
@@ -96,7 +101,7 @@ function WeatherCard() {
                                 ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
                                     <CloudTwoTone sx={{ color: grey[500], fontSize: 150 }} />
                                 ) : (
-                                    <>no data</>
+                                    <></>
                                 )}
                             </Grid>
                             <Grid item xs={12}>
@@ -159,9 +164,12 @@ function WeatherCard() {
                     </CardContent>
                 </Card>
             ) : (
-                <></>
+                <>
+                    <img src={logo} alt="loading..." />
+                    <div></div>
+                </>
             )}
         </>
     );
-}
+};
 export default React.memo(WeatherCard);

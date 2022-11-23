@@ -48,7 +48,7 @@ export interface WeatherInterface {
 }
 
 export const getWeather = (search: string) => {
-    return axios.get(`${API_URL}/weather`, {
+    return axios.get(`${API_URL}/api/weather`, {
         params: {
             search: search,
         },

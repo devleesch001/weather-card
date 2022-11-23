@@ -5,14 +5,17 @@ import CardContent from '@mui/material/CardContent';
 //import meteo
 import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import AirIcon from '@mui/icons-material/Air';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import WbSunnyIcon from '@mui/icons-material/WbSunnyTwoTone';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import CloudIcon from '@mui/icons-material/Cloud';
 import { getWeather, WeatherDataInterface, WeatherInterface } from '../api/weather';
-import { CardHeader, Typography } from '@mui/material';
+import { CardHeader, Grid, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
 
 import * as Compass from 'cardinal-direction';
+import { grey, yellow } from '@mui/material/colors';
+import { AcUnitTwoTone, AirTwoTone, CloudTwoTone, ThunderstormTwoTone, WbSunnyTwoTone } from '@mui/icons-material';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -64,47 +67,66 @@ function WeatherCard() {
 
     return (
         <>
-            <a></a>
-            <a />
             {weather ? (
                 <Card>
-                    <CardHeader
-                        title={
-                            weather.weatherId >= 200 && weather.weatherId <= 232 ? (
-                                <ThunderstormIcon /> //orage
-                            ) : weather.weatherId >= 300 && weather.weatherId <= 321 ? (
-                                <ThunderstormIcon /> //bruine modif icone
-                            ) : weather.weatherId >= 500 && weather.weatherId <= 531 ? (
-                                <ThunderstormIcon /> //pluie legere
-                            ) : weather.weatherId >= 600 && weather.weatherId <= 622 ? (
-                                <AcUnitIcon /> // neige
-                            ) : weather.weatherId >= 701 && weather.weatherId <= 781 ? (
-                                <ThunderstormIcon /> // brouillard
-                            ) : weather.weatherId == 800 ? (
-                                <WbSunnyIcon /> //soleil
-                            ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
-                                <CloudIcon />
-                            ) : (
-                                <>no data</>
-                            )
-                        }
-                    />
+                    <CardHeader title="nom de la ville" />
                     <CardContent>
-                        <Typography>{(weather.temp.temperature - 273.15).toPrecision(3)}°C</Typography>
-                        <Typography>ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C </Typography>
-                        <Typography>
-                            Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C -- Max:{' '}
-                            {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
-                        </Typography>
-                        <AirIcon></AirIcon>
-                        <Typography>{(weather.wind.speed * 3.6).toPrecision(3)} km/H</Typography>
-                        <Typography>{Compass.degreeFromCardinal(weather.wind.angle)} </Typography>
-                        {weather.wind.gust ? (
-                            <Typography>{(weather.wind.gust * 3.6).toPrecision(3)} km/H</Typography>
-                        ) : (
-                            <></>
-                        )}
-                        <Typography>Humidity : {weather.humidity} % </Typography>
+                        <Grid container spacing={2} alignContent={'center'}>
+                            <Grid item xs={12}>
+                                {weather.weatherId >= 200 && weather.weatherId <= 232 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> //orage
+                                ) : weather.weatherId >= 300 && weather.weatherId <= 321 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> //bruine
+                                ) : weather.weatherId >= 500 && weather.weatherId <= 531 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> //pluie legere
+                                ) : weather.weatherId >= 600 && weather.weatherId <= 622 ? (
+                                    <AcUnitTwoTone sx={{ color: grey[500], fontSize: 250 }} /> // neige
+                                ) : weather.weatherId >= 701 && weather.weatherId <= 781 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> // brouillard
+                                ) : weather.weatherId == 800 ? (
+                                    <WbSunnyTwoTone sx={{ color: yellow[500], fontSize: 250 }} /> //soleil
+                                ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
+                                    <CloudTwoTone sx={{ color: grey[500], fontSize: 250 }} />
+                                ) : (
+                                    <>no data</>
+                                )}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography>
+                                    <span style={{ color: 'gold', fontSize: 50 }}>
+                                        {(weather.temp.temperature - 273.15).toPrecision(3)}°C
+                                    </span>
+                                </Typography>
+                                <Typography>
+                                    <span style={{ color: 'black', fontSize: 30 }}>
+                                        ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
+                                    </span>
+                                </Typography>
+                                <Typography>
+                                    <span style={{ color: 'darkblue', fontSize: 20 }}>
+                                        Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C
+                                    </span>
+                                    <span style={{ color: 'darkred', fontSize: 20 }}>
+                                        Max : {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
+                                    </span>
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <AirTwoTone sx={{ color: 'grey', fontSize: 100, position: 'central' }} />
+                                <Typography>{(weather.wind.speed * 3.6).toPrecision(3)} km/H</Typography>
+                                <Typography>{Compass.degreeFromCardinal(weather.wind.angle)} </Typography>
+
+                                {weather.wind.gust ? (
+                                    <Typography>{(weather.wind.gust * 3.6).toPrecision(3)} km/H</Typography>
+                                ) : (
+                                    <></>
+                                )}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <WaterTwoToneIcon sx={{ color: 'blue', fontSize: 100, position: 'central' }} />
+                                <Typography>Humidity : {weather.humidity} % </Typography>
+                            </Grid>
+                        </Grid>
                     </CardContent>
                 </Card>
             ) : (

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import UserRoute from './UserRoute';
-import WeatherRoute from './Weather/WeatherRoute';
-import Authentification from '~/api/AuthentificationRoute';
+import WeatherRoute from './WeatherRoute';
+import Authentication from './AuthenticationRoute';
 const router = Router();
 
 router.get('/', (request, response) => {
@@ -10,6 +10,6 @@ router.get('/', (request, response) => {
 
 router.use('/user', UserRoute);
 router.use('/weather', WeatherRoute);
-router.use('/', Authentification);
+router.use('/auth', Authentication);
 
 export default router;

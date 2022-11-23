@@ -13,20 +13,21 @@ router.post(
         const user = await User.findByEmailOrUsername(req.body.email);
 
         if (!user) {
-            res.status(401).send('invalid credentials');
+            res.status(401).send({ message: 'invalid credentials' });
             return;
         }
 
         const password = req.body['password'];
 
         if (!(await user.checkPassword(password))) {
-            res.status(401).send('invalid credentials');
+            res.status(401).send({ message: 'invalid password' });
             return;
         }
 
         const accessToken = generateAccessToken(user.toUserInformation());
+        console.log(accessToken);
         res.send({
-            accessToken,
+            token: accessToken,
         });
     }
 );

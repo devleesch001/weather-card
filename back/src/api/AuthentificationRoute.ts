@@ -25,7 +25,6 @@ router.post(
         }
 
         const accessToken = generateAccessToken(user.toUserInformation());
-        console.log(accessToken);
         res.send({
             token: accessToken,
         });

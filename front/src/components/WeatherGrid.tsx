@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import WeatherCard from './WeatherCard';
 
-function WeatherhGrid() {
+function WeatherGrid() {
     return (
         <Box sx={{ flexGrow: 1 }} margin={2}>
             <Grid container spacing={2} alignItems="center" justifyContent="center">
@@ -15,4 +15,4 @@ function WeatherhGrid() {
     );
 }
 
-export default React.memo(WeatherhGrid);
+export default React.memo(WeatherGrid);

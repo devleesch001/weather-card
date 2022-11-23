@@ -71,7 +71,7 @@ function WeatherCard() {
                 <Card>
                     <CardHeader title="nom de la ville" />
                     <CardContent>
-                        <Grid container spacing={2} justifyContent="center" alignItems="center">
+                        <Grid container spacing={1} justifyContent="center" alignItems="center">
                             <Grid item xs={6} style={{ placeItems: 'center' }}>
                                 <Typography>
                                     <span style={{ color: 'gold', fontSize: 50 }}>
@@ -98,7 +98,27 @@ function WeatherCard() {
                                     <>no data</>
                                 )}
                             </Grid>
-
+                            <Grid item xs={12}>
+                                <Typography>
+                                    <span style={{ color: 'black', fontSize: 30 }}>
+                                        ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
+                                    </span>
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
+                                <Typography>
+                                    <span style={{ color: 'darkblue', fontSize: 20 }}>
+                                        Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C
+                                    </span>
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
+                                <Typography>
+                                    <span style={{ color: 'darkred', fontSize: 20 }}>
+                                        Max : {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
+                                    </span>
+                                </Typography>
+                            </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 30 }}>
@@ -121,32 +141,18 @@ function WeatherCard() {
                                 )}
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
-                                <AirTwoTone sx={{ color: 'grey', fontSize: 150, position: 'central' }} />
+                                <AirTwoTone sx={{ color: 'grey', fontSize: 100, position: 'central' }} />
                             </Grid>
-                            <Grid item xs={12}>
+
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
-                                    <span style={{ color: 'black', fontSize: 30 }}>
-                                        ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
+                                    <span style={{ color: 'black', fontSize: 20 }}>
+                                        Humidity : {weather.humidity} %
                                     </span>
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
-                                <Typography>
-                                    <span style={{ color: 'darkblue', fontSize: 20 }}>
-                                        Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C
-                                    </span>
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6} justifyContent="center" alignItems="center">
-                                <Typography>
-                                    <span style={{ color: 'darkred', fontSize: 20 }}>
-                                        Max : {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
-                                    </span>
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
                                 <WaterTwoToneIcon sx={{ color: 'blue', fontSize: 100, position: 'central' }} />
-                                <Typography>Humidity : {weather.humidity} % </Typography>
                             </Grid>
                         </Grid>
                     </CardContent>

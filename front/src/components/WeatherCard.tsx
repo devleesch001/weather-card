@@ -1,9 +1,10 @@
 import * as React from 'react';
+import logo from '../assets/WeatherAppLogo.gif';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { getWeather, WeatherDataInterface } from '../api/weather';
-import { CardHeader, Grid, Typography } from '@mui/material';
+import { CardHeader, CardMedia, Grid, Typography } from '@mui/material';
 
 //import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
 
@@ -96,7 +97,7 @@ function WeatherCard() {
                                 ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
                                     <CloudTwoTone sx={{ color: grey[500], fontSize: 150 }} />
                                 ) : (
-                                    <>no data</>
+                                    <></>
                                 )}
                             </Grid>
                             <Grid item xs={12}>
@@ -159,7 +160,7 @@ function WeatherCard() {
                     </CardContent>
                 </Card>
             ) : (
-                <></>
+                <img src={logo} alt="loading..." />
             )}
         </>
     );

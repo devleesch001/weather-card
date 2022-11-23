@@ -9,6 +9,18 @@ function WeatherhGrid() {
             <Grid container spacing={2} alignItems="center" justifyContent="center">
                 <Grid item md={6} lg={4}>
                     <WeatherCard></WeatherCard>
+                </Grid>{' '}
+                <Grid item md={6} lg={4}>
+                    <WeatherCard></WeatherCard>
+                </Grid>{' '}
+                <Grid item md={6} lg={4}>
+                    <WeatherCard></WeatherCard>
+                </Grid>{' '}
+                <Grid item md={6} lg={4}>
+                    <WeatherCard></WeatherCard>
+                </Grid>{' '}
+                <Grid item md={6} lg={4}>
+                    <WeatherCard></WeatherCard>
                 </Grid>
             </Grid>
         </Box>

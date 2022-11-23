@@ -13,10 +13,11 @@ import Button from '@mui/material/Button';
 
 interface MenuAppBarInterface {
     handleLoginModalOpen(): void;
+    handleProfileModalOpen(): void;
 }
 
 const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
-    const { handleLoginModalOpen } = Props;
+    const { handleLoginModalOpen, handleProfileModalOpen } = Props;
 
     const menuId = 'primary-search-account-menu';
 
@@ -56,12 +57,11 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
             <MenuItem
                 onClick={() => {
                     handleMenuClose();
-                    handleLoginModalOpen();
+                    handleProfileModalOpen();
                 }}
             >
                 Profile
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
             <MenuItem
                 onClick={() => {
                     handleMenuClose();

@@ -7,7 +7,7 @@ function WeatherhGrid() {
     return (
         <Box sx={{ flexGrow: 1 }} margin={2}>
             <Grid container spacing={2} alignItems="center" justifyContent="center">
-                <Grid item sm={6} md={4}>
+                <Grid item md={6} lg={4}>
                     <WeatherCard></WeatherCard>
                 </Grid>
             </Grid>

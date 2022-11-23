@@ -2,18 +2,24 @@ import * as React from 'react';
 import Box from '@mui/material/Box'; // import box
 import MenuAppBar from './MenuAppBar';
 import WeatherhGrid from './WeatherGrid';
-import Login from './Login'; //bouton menu
+import Login from './Login';
+import Profile from '../components/Profile'; //bouton menu
 
 function Home() {
     const [openLoginModal, setOpenLoginModal] = React.useState(false);
     const handleOpenLoginModal = () => setOpenLoginModal(true);
     const handleCloseLoginModal = () => setOpenLoginModal(false);
 
+    const [openProfileModal, setOpenProfileModal] = React.useState(false);
+    const handleOpenProfileModal = () => setOpenProfileModal(true);
+    const handleCloseProfileModal = () => setOpenProfileModal(false);
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <MenuAppBar handleLoginModalOpen={handleOpenLoginModal} />
+            <MenuAppBar handleLoginModalOpen={handleOpenLoginModal} handleProfileModalOpen={handleOpenProfileModal} />
             <WeatherhGrid />
             <Login open={openLoginModal} handleClose={handleCloseLoginModal} />
+            <Profile open={openProfileModal} handleClose={handleCloseProfileModal} />
         </Box>
     );
 }

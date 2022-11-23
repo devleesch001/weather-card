@@ -13,9 +13,11 @@ import Paper from '@mui/material/Paper';
 import Modal from '@mui/material/Modal';
 
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 
 import LoginIcon from '@mui/icons-material/Login';
 import RegisterIcon from '@mui/icons-material/ExitToApp';
+import { getAuthToken } from '../services/AuthentificationService';
 
 const style = {
     position: 'absolute' as const,
@@ -31,7 +33,14 @@ interface LoginProps {
     handleClose(): void;
 }
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC<{ handleClose(): void }> = (Props) => {
+    const { handleClose } = Props;
+    const closeHandler = () => {
+        setTimeout(handleClose, 1000);
+    };
+
+    const [authStatus, setAuthStatus] = React.useState<'none' | 'error' | 'success'>('none');
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -41,16 +50,32 @@ const LoginForm: React.FC = () => {
 
         if (!email || !password) return;
 
-        AuthService.login(email, password).then((r) => {
-            const token = r.data.token;
-            AuthService.setAuthToken(token);
-        });
+        AuthService.login(email, password)
+            .then((r) => {
+                const token = r.data.token;
+                console.log(token);
+                AuthService.setAuthToken(token);
+                setAuthStatus('success');
+                closeHandler();
+            })
+            .catch(() => {
+                console.log('error');
+                setAuthStatus('error');
+            });
     };
 
     const formName = 'Sign In';
 
     return (
         <Box alignItems={'center'} flexDirection={'column'} padding={5}>
+            {authStatus === 'success' ? (
+                <Alert severity="success">Connected</Alert>
+            ) : authStatus === 'error' ? (
+                <Alert severity="error">Failed</Alert>
+            ) : (
+                <></>
+            )}
+
             <Typography component="h1" variant="h5">
                 {formName}
             </Typography>
@@ -85,7 +110,14 @@ const LoginForm: React.FC = () => {
     );
 };
 
-const RegisterForm: React.FC = () => {
+const RegisterForm: React.FC<{ handleClose(): void }> = (Props) => {
+    const { handleClose } = Props;
+    const closeHandler = () => {
+        setTimeout(handleClose, 1000);
+    };
+
+    const [authStatus, setAuthStatus] = React.useState<'none' | 'error' | 'success'>('none');
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -96,16 +128,29 @@ const RegisterForm: React.FC = () => {
 
         if (!username || !email || !password) return;
 
-        AuthService.register(username, email, password).then((r) => {
-            const token = r.data.token;
-            AuthService.setAuthToken(token);
-        });
+        AuthService.register(username, email, password)
+            .then((r) => {
+                const token = r.data.token;
+                AuthService.setAuthToken(token);
+                setAuthStatus('success');
+                closeHandler();
+            })
+            .catch(() => {
+                setAuthStatus('error');
+            });
     };
 
     const formName = 'Sign Up';
 
     return (
         <Box alignItems={'center'} flexDirection={'column'} padding={5}>
+            {authStatus === 'success' ? (
+                <Alert severity="success">Connected</Alert>
+            ) : authStatus === 'error' ? (
+                <Alert severity="error">Failed</Alert>
+            ) : (
+                <></>
+            )}
             <Typography component="h1" variant="h5">
                 {formName}
             </Typography>
@@ -155,6 +200,11 @@ const Login: React.FC<LoginProps> = (Props) => {
     const { open, handleClose } = Props;
     const [value, setValue] = React.useState(0);
 
+    /* close page if already connected */
+    if (AuthService.getAuthToken()) {
+        handleClose();
+    }
+
     return (
         <Modal
             open={open}
@@ -176,7 +226,7 @@ const Login: React.FC<LoginProps> = (Props) => {
                             <BottomNavigationAction label="Register" icon={<RegisterIcon />} />
                         </BottomNavigation>
                     </Paper>
-                    {value === 0 ? <LoginForm /> : <RegisterForm />}
+                    {value === 0 ? <LoginForm handleClose={handleClose} /> : <RegisterForm handleClose={handleClose} />}
                 </Paper>
             </Box>
         </Modal>

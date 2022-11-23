@@ -2,15 +2,18 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 
 import ApiIndex from './api/index';
+import MangoDBService from '~/services/MangoDBService';
+import RedisService from '~/services/RedisService';
 
-run().catch((err) => console.log(err));
+MangoDBService.init()
+    .then(() => console.log('mangodb init'))
+    .catch((err) => console.log(err));
 
-async function run() {
-    await mongoose.connect('mongodb://root:example@127.0.0.1:27017');
-}
+RedisService.init()
+    .then(() => console.log('redis init'))
+    .catch((err) => console.log(err));
 
 dotenv.config();
 

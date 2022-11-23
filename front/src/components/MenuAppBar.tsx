@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, MouseEvent, useEffect } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import { Box, Menu, MenuItem } from '@mui/material';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import * as AuthService from '../services/AuthentificationService';
+import Button from '@mui/material/Button';
 
 interface MenuAppBarInterface {
     handleLoginModalOpen(): void;
@@ -18,10 +20,16 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
 
     const menuId = 'primary-search-account-menu';
 
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [connected, setConnected] = useState(false);
+
+    useEffect(() => {
+        setConnected(Boolean(AuthService.getAuthToken()));
+    }, [AuthService.getAuthToken()]);
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const isMenuOpen = Boolean(anchorEl);
 
-    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -54,6 +62,14 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
                 Profile
             </MenuItem>
             <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem
+                onClick={() => {
+                    handleMenuClose();
+                    AuthService.logout();
+                }}
+            >
+                Logout
+            </MenuItem>
         </Menu>
     );
 
@@ -67,17 +83,25 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
                     News
                 </Typography>
                 <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <IconButton
-                        size="large"
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-controls={menuId}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
-                    >
-                        <AccountCircle />
-                    </IconButton>
+                    {connected ? (
+                        <IconButton
+                            size="large"
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            onClick={handleProfileMenuOpen}
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                    ) : (
+                        <>
+                            <Button variant="contained" disableElevation onClick={handleLoginModalOpen}>
+                                Sign-In
+                            </Button>
+                        </>
+                    )}
                 </Box>
             </Toolbar>
             {renderMenu}

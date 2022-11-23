@@ -52,13 +52,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-interface MenuAppBarInterface {
+interface MenuAppBarProps {
     handleLoginModalOpen(): void;
     handleProfileModalOpen(): void;
+    handleAddListStation(station: string): void;
 }
 
-const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
-    const { handleLoginModalOpen, handleProfileModalOpen } = Props;
+const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
+    const { handleLoginModalOpen, handleProfileModalOpen, handleAddListStation } = Props;
 
     const menuId = 'primary-search-account-menu';
 
@@ -132,7 +133,8 @@ const MenuAppBar: React.FC<MenuAppBarInterface> = (Props) => {
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 const target = e.target as HTMLInputElement;
-                                console.log(target.value);
+                                handleAddListStation(target.value);
+                                target.value = '';
                             }
                         }}
                         inputProps={{ 'aria-label': 'search' }}

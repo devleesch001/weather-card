@@ -56,11 +56,15 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
     return weatherInfo;
 }
 
-function WeatherCard() {
+interface WeatherCardProps {
+    stationName: string;
+}
+const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
+    const { stationName } = Props;
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null); //Hoock
 
     React.useEffect(() => {
-        getWeather('paris').then((r) => {
+        getWeather(stationName).then((r) => {
             const data = r.data as WeatherDataInterface;
             const weatherInfo = toWeatherInfoInterface(data);
             setWeather(weatherInfo);
@@ -71,7 +75,7 @@ function WeatherCard() {
         <>
             {weather ? (
                 <Card>
-                    <CardHeader title="nom de la ville" />
+                    <CardHeader>title={stationName}</CardHeader>
                     <CardContent>
                         <Grid container spacing={1} justifyContent="center" alignItems="center">
                             <Grid item xs={6} style={{ placeItems: 'center' }}>
@@ -160,9 +164,12 @@ function WeatherCard() {
                     </CardContent>
                 </Card>
             ) : (
-                <img src={logo} alt="loading..." />
+                <>
+                    <img src={logo} alt="loading..." />
+                    <div></div>
+                </>
             )}
         </>
     );
-}
+};
 export default React.memo(WeatherCard);

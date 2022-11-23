@@ -3,28 +3,24 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import WeatherCard from './WeatherCard';
 
-function WeatherGrid() {
+interface WeatherGridProps {
+    listStation: string[];
+}
+
+const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
+    const { listStation } = Props;
+
     return (
         <Box sx={{ flexGrow: 1 }} margin={2}>
             <Grid container spacing={2} alignItems="center" justifyContent="center">
-                <Grid item md={6} lg={4}>
-                    <WeatherCard></WeatherCard>
-                </Grid>{' '}
-                <Grid item md={6} lg={4}>
-                    <WeatherCard></WeatherCard>
-                </Grid>{' '}
-                <Grid item md={6} lg={4}>
-                    <WeatherCard></WeatherCard>
-                </Grid>{' '}
-                <Grid item md={6} lg={4}>
-                    <WeatherCard></WeatherCard>
-                </Grid>{' '}
-                <Grid item md={6} lg={4}>
-                    <WeatherCard></WeatherCard>
-                </Grid>
+                {listStation.map((station, index) => (
+                    <Grid item md={6} lg={4} key={index}>
+                        <WeatherCard stationName={station}></WeatherCard>
+                    </Grid>
+                ))}
             </Grid>
         </Box>
     );
-}
+};
 
 export default React.memo(WeatherGrid);

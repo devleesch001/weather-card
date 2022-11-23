@@ -5,9 +5,9 @@ import WeatherCard from './WeatherCard';
 
 function WeatherhGrid() {
     return (
-        <Box sx={{ flexGrow: 1 }} margin={5}>
+        <Box sx={{ flexGrow: 1 }} margin={2}>
             <Grid container spacing={2} alignItems="center" justifyContent="center">
-                <Grid item xs={6} md={4}>
+                <Grid item sm={6} md={4}>
                     <WeatherCard></WeatherCard>
                 </Grid>
             </Grid>

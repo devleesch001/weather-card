@@ -71,56 +71,78 @@ function WeatherCard() {
                 <Card>
                     <CardHeader title="nom de la ville" />
                     <CardContent>
-                        <Grid container spacing={2} alignContent={'center'}>
-                            <Grid item xs={12}>
-                                {weather.weatherId >= 200 && weather.weatherId <= 232 ? (
-                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> //orage
-                                ) : weather.weatherId >= 300 && weather.weatherId <= 321 ? (
-                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> //bruine
-                                ) : weather.weatherId >= 500 && weather.weatherId <= 531 ? (
-                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> //pluie legere
-                                ) : weather.weatherId >= 600 && weather.weatherId <= 622 ? (
-                                    <AcUnitTwoTone sx={{ color: grey[500], fontSize: 250 }} /> // neige
-                                ) : weather.weatherId >= 701 && weather.weatherId <= 781 ? (
-                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 250 }} /> // brouillard
-                                ) : weather.weatherId == 800 ? (
-                                    <WbSunnyTwoTone sx={{ color: yellow[500], fontSize: 250 }} /> //soleil
-                                ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
-                                    <CloudTwoTone sx={{ color: grey[500], fontSize: 250 }} />
-                                ) : (
-                                    <>no data</>
-                                )}
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid container spacing={2} justifyContent="center" alignItems="center">
+                            <Grid item xs={6} style={{ placeItems: 'center' }}>
                                 <Typography>
                                     <span style={{ color: 'gold', fontSize: 50 }}>
                                         {(weather.temp.temperature - 273.15).toPrecision(3)}°C
                                     </span>
                                 </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
+                                {weather.weatherId >= 200 && weather.weatherId <= 232 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 150 }} /> //orage
+                                ) : weather.weatherId >= 300 && weather.weatherId <= 321 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 150 }} /> //bruine
+                                ) : weather.weatherId >= 500 && weather.weatherId <= 531 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 150 }} /> //pluie legere
+                                ) : weather.weatherId >= 600 && weather.weatherId <= 622 ? (
+                                    <AcUnitTwoTone sx={{ color: grey[500], fontSize: 150 }} /> // neige
+                                ) : weather.weatherId >= 701 && weather.weatherId <= 781 ? (
+                                    <ThunderstormTwoTone sx={{ color: grey[500], fontSize: 150 }} /> // brouillard
+                                ) : weather.weatherId == 800 ? (
+                                    <WbSunnyTwoTone sx={{ color: yellow[500], fontSize: 150 }} /> //soleil
+                                ) : weather.weatherId >= 801 && weather.weatherId <= 804 ? (
+                                    <CloudTwoTone sx={{ color: grey[500], fontSize: 150 }} />
+                                ) : (
+                                    <>no data</>
+                                )}
+                            </Grid>
+
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
+                                <Typography>
+                                    <span style={{ color: 'black', fontSize: 30 }}>
+                                        {(weather.wind.speed * 3.6).toPrecision(3)} km/H
+                                    </span>
+                                </Typography>
+                                <Typography>
+                                    <span style={{ color: 'black', fontSize: 30 }}>
+                                        {Compass.degreeFromCardinal(weather.wind.angle)}
+                                    </span>
+                                </Typography>
+                                {weather.wind.gust ? (
+                                    <Typography>
+                                        <span style={{ color: 'black', fontSize: 30 }}>
+                                            {(weather.wind.gust * 3.6).toPrecision(3)} km/H
+                                        </span>
+                                    </Typography>
+                                ) : (
+                                    <></>
+                                )}
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
+                                <AirTwoTone sx={{ color: 'grey', fontSize: 150, position: 'central' }} />
+                            </Grid>
+                            <Grid item xs={12}>
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 30 }}>
                                         ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
                                     </span>
                                 </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'darkblue', fontSize: 20 }}>
                                         Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C
                                     </span>
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center" alignItems="center">
+                                <Typography>
                                     <span style={{ color: 'darkred', fontSize: 20 }}>
                                         Max : {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
                                     </span>
                                 </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <AirTwoTone sx={{ color: 'grey', fontSize: 100, position: 'central' }} />
-                                <Typography>{(weather.wind.speed * 3.6).toPrecision(3)} km/H</Typography>
-                                <Typography>{Compass.degreeFromCardinal(weather.wind.angle)} </Typography>
-
-                                {weather.wind.gust ? (
-                                    <Typography>{(weather.wind.gust * 3.6).toPrecision(3)} km/H</Typography>
-                                ) : (
-                                    <></>
-                                )}
                             </Grid>
                             <Grid item xs={6}>
                                 <WaterTwoToneIcon sx={{ color: 'blue', fontSize: 100, position: 'central' }} />

@@ -12,10 +12,18 @@ export const setAuthToken = (token: string) => {
     }
 };
 
+export const getAuthToken = (): string | null => {
+    return localStorage.getItem('token');
+};
+
 export const register = (username: string, email: string, password: string) => {
     return axios.post(`${API_URL}/api/user`, { email: email, username: username, password: password });
 };
 
 export const login = (email: string, password: string) => {
     return axios.post(`${API_URL}/api/login`, { email: email, password: password });
+};
+
+export const logout = () => {
+    return localStorage.removeItem('token');
 };

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import User from '~/models/User';
 import { auth } from '~/middleware/AuthenticateMiddleware';
+import { generateAccessToken } from '~/services/AuthenticationService';
 
 const router = Router();
 
@@ -42,8 +43,9 @@ router.post(
 
         user.save()
             .then(() => {
-                res.status(201);
-                res.send({ user: user });
+                const accessToken = generateAccessToken(user.toUserInformation());
+
+                res.status(201).send({ user: user.toUserInformation(), token: accessToken });
             })
             .catch(() => {
                 res.status(400);

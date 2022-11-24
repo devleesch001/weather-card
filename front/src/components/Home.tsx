@@ -24,6 +24,11 @@ function Home() {
         }
     };
 
+    const addFavHandler = (stationName: string, stationFav: boolean) => {
+        const stationIndex = listStation.findIndex((station) => station.station == stationName);
+        listStation[stationIndex].isUserFav = stationFav;
+    };
+    console.log(listStation);
     return (
         <Box sx={{ flexGrow: 1 }}>
             <MenuAppBar
@@ -31,7 +36,7 @@ function Home() {
                 handleProfileModalOpen={handleOpenProfileModal}
                 handleAddListStation={addListStationHandeler}
             />
-            <WeatherGrid listStation={listStation} />
+            <WeatherGrid listStation={listStation} handleFav={addFavHandler} />
             <Login open={openLoginModal} handleClose={handleCloseLoginModal} />
             <Profile open={openProfileModal} handleClose={handleCloseProfileModal} />
         </Box>

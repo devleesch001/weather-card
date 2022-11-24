@@ -4,10 +4,7 @@ import logo from '../assets/WeatherAppLogo.gif';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { getWeather, WeatherDataInterface } from '../api/weather';
-import { CardHeader, CardMedia, Grid, Typography } from '@mui/material';
-
-//import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
-
+import { CardHeader, CardMedia, Grid, IconButton, Typography } from '@mui/material';
 import { grey, yellow } from '@mui/material/colors';
 import {
     AcUnitTwoTone,
@@ -16,8 +13,11 @@ import {
     ThunderstormTwoTone,
     WbSunnyTwoTone,
     WaterTwoTone,
+    StarTwoTone,
 } from '@mui/icons-material';
 import { cardinalPoint, cardinalIntFromDegree } from '../services/Compass';
+import { useState } from 'react';
+import _ from 'lodash';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -71,11 +71,26 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
         });
     }, []);
 
+    function addFavEndler() {
+        //TODO
+    }
+
     return (
         <>
             {weather ? (
                 <Card>
-                    <CardHeader>title={stationName}</CardHeader>
+                    <CardHeader
+                        title={
+                            <Typography variant="h3" gutterBottom>
+                                {stationName}
+                            </Typography>
+                        }
+                        action={
+                            <IconButton>
+                                <StarTwoTone sx={{ color: yellow[500], fontSize: 50 }} onClick={addFavEndler} />
+                            </IconButton>
+                        }
+                    />
                     <CardContent>
                         <Grid container spacing={1} justifyContent="center" alignItems="center">
                             <Grid item xs={6} style={{ placeItems: 'center' }}>

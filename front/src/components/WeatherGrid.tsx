@@ -15,9 +15,9 @@ const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
     return (
         <Box sx={{ flexGrow: 1 }} margin={2}>
             <Grid container spacing={2} alignItems="center" justifyContent="center">
-                {listStation.map((station, index) => (
+                {listStation.map((station, index, stationList) => (
                     <Grid item md={6} lg={4} key={index}>
-                        <WeatherCard weatherCard={station} handleFav={handleFav}></WeatherCard>
+                        <WeatherCard weatherCard={station} handleFav={handleFav} stationList={stationList} />
                     </Grid>
                 ))}
             </Grid>

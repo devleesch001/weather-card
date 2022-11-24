@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import WeatherCard from './WeatherCard';
+import WeatherCard, { WeatherCardInterface } from './WeatherCard';
 
 interface WeatherGridProps {
-    listStation: string[];
+    listStation: WeatherCardInterface[];
 }
 
 const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
@@ -15,7 +15,7 @@ const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
             <Grid container spacing={2} alignItems="center" justifyContent="center">
                 {listStation.map((station, index) => (
                     <Grid item md={6} lg={4} key={index}>
-                        <WeatherCard stationName={station}></WeatherCard>
+                        <WeatherCard weatherCard={station}></WeatherCard>
                     </Grid>
                 ))}
             </Grid>

@@ -17,7 +17,6 @@ import Alert from '@mui/material/Alert';
 
 import LoginIcon from '@mui/icons-material/Login';
 import RegisterIcon from '@mui/icons-material/ExitToApp';
-import { getAuthToken } from '../services/AuthentificationService';
 
 const style = {
     position: 'absolute' as const,

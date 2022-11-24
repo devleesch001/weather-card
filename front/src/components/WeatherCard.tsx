@@ -16,6 +16,7 @@ import {
     WbSunnyTwoTone,
 } from '@mui/icons-material';
 import { cardinalIntFromDegree, cardinalPoint } from '../services/Compass';
+import { setFavoris } from '../api/favorite';
 import ExploreIcon from '@mui/icons-material/Explore';
 
 // interface pour information utilise
@@ -61,10 +62,11 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
 
 interface WeatherCardProps {
     weatherCard: WeatherCardInterface;
+    stationList: WeatherCardInterface[];
     handleFav(stationName: string, stationFav: boolean): void;
 }
 const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
-    const { weatherCard, handleFav } = Props;
+    const { weatherCard, stationList, handleFav } = Props;
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
@@ -80,7 +82,11 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
     function favHandeler(value: boolean) {
         handleFav(weatherCard.station, value);
         setIsFav(value);
+        setFavoris(
+            stationList.filter((favStation) => favStation.isUserFav).map((favStationName) => favStationName.station)
+        ).then();
     }
+
     return (
         <>
             {weather ? (

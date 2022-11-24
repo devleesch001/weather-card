@@ -1,6 +1,7 @@
-import axios, { AxiosResponse, responseEncoding } from 'axios';
+import axios from 'axios';
+import { WeatherCardInterface } from '../components/WeatherCard';
 
-const API_URL = process.env.REACT_APP_API_URL ?? 'http://10.3.2.54:8080/api';
+const API_URL = process.env.REACT_APP_API_URL ?? 'http://10.3.2.54:8080';
 
 export interface WeatherDataInterface {
     coord: {
@@ -47,10 +48,11 @@ export interface WeatherInterface {
     icon: string;
 }
 
-export const getWeather = (search: string) => {
+export const getWeather = (search: WeatherCardInterface) => {
     return axios.get(`${API_URL}/api/weather`, {
         params: {
-            search: search,
+            lon: search.location.lon,
+            lat: search.location.lat,
         },
     });
 };

@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import WeatherCard, { WeatherCardInterface } from './WeatherCard';
-import weatherCard from './WeatherCard';
 
 interface WeatherGridProps {
     listStation: WeatherCardInterface[];

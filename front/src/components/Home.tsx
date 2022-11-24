@@ -16,10 +16,12 @@ function Home() {
     const handleOpenProfileModal = () => setOpenProfileModal(true);
     const handleCloseProfileModal = () => setOpenProfileModal(false);
 
-    const [listStation, setListStation] = useState<WeatherCardInterface[]>([{ station: 'paris', isUserFav: false }]);
-    const addListStationHandeler = (stationName: string) => {
-        if (listStation.some((station) => station.station !== stationName)) {
-            listStation.push({ station: stationName, isUserFav: false });
+    const [listStation, setListStation] = useState<WeatherCardInterface[]>([
+        { station: 'paris', isUserFav: false, location: { lat: 48.8588897, lon: 2.3200410217200766 } },
+    ]);
+    const addListStationHandeler = (newStation: WeatherCardInterface) => {
+        if (listStation.some((station) => station.station !== newStation.station)) {
+            listStation.push(newStation);
             setListStation([...listStation]);
         }
     };
@@ -28,7 +30,7 @@ function Home() {
         const stationIndex = listStation.findIndex((station) => station.station == stationName);
         listStation[stationIndex].isUserFav = stationFav;
     };
-    console.log(listStation);
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <MenuAppBar

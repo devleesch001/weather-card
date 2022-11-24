@@ -10,12 +10,13 @@ import {
     AcUnitTwoTone,
     AirTwoTone,
     CloudTwoTone,
-    ThunderstormTwoTone,
-    WbSunnyTwoTone,
-    WaterTwoTone,
     StarTwoTone,
+    ThunderstormTwoTone,
+    WaterTwoTone,
+    WbSunnyTwoTone,
 } from '@mui/icons-material';
-import { cardinalPoint, cardinalIntFromDegree } from '../services/Compass';
+import { cardinalIntFromDegree, cardinalPoint } from '../services/Compass';
+import ExploreIcon from '@mui/icons-material/Explore';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -36,11 +37,12 @@ export interface WeatherInfoInterface {
 
 export interface WeatherCardInterface {
     station: string;
+    location: { lon: number; lat: number };
     isUserFav: boolean;
 }
 
 function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoInterface {
-    const weatherInfo: WeatherInfoInterface = {
+    return {
         weatherId: weatherData.weather[0].id ?? 0,
         temp: {
             temperature: weatherData.main.temp,
@@ -55,8 +57,6 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
         },
         humidity: weatherData.main.humidity,
     };
-
-    return weatherInfo;
 }
 
 interface WeatherCardProps {
@@ -68,7 +68,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
-        getWeather(weatherCard.station).then((r) => {
+        getWeather(weatherCard).then((r) => {
             const data = r.data as WeatherDataInterface;
             const weatherInfo = toWeatherInfoInterface(data);
             setWeather(weatherInfo);
@@ -132,7 +132,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             <Grid item xs={12}>
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 30 }}>
-                                        ressentit: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
+                                        ressenti: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
                                     </span>
                                 </Typography>
                             </Grid>
@@ -152,26 +152,25 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
-                                    <span style={{ color: 'black', fontSize: 30 }}>
+                                    <span style={{ color: 'black', fontSize: 28 }}>
                                         {(weather.wind.speed * 3.6).toPrecision(3)} km/H
                                     </span>
                                 </Typography>
                                 <Typography>
-                                    <span style={{ color: 'black', fontSize: 30 }}>
+                                    <ExploreIcon color={'primary'} style={{ marginRight: 4 }} />
+                                    <span style={{ color: 'black', fontSize: 28 }}>
                                         {cardinalPoint(cardinalIntFromDegree(weather.wind.angle))}
                                     </span>
                                 </Typography>
                                 {weather.wind.gust ? (
                                     <Typography>
-                                        <span style={{ color: 'black', fontSize: 30 }}>
+                                        <span style={{ color: 'black', fontSize: 28 }}>
                                             {(weather.wind.gust * 3.6).toPrecision(3)} km/H
                                         </span>
                                     </Typography>
                                 ) : (
                                     <Typography style={{ cursor: 'default' }}>
-                                        <span style={{ color: 'black', fontSize: 30, opacity: 0.0 }}>
-                                            Dont read me ;)
-                                        </span>
+                                        <span style={{ color: 'black', fontSize: 28, opacity: 0.0 }}>1</span>
                                     </Typography>
                                 )}
                             </Grid>
@@ -182,7 +181,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 20 }}>
-                                        Humidity : {weather.humidity} %
+                                        Humidité : {weather.humidity} %
                                     </span>
                                 </Typography>
                             </Grid>

@@ -7,6 +7,7 @@ const SALT_ROUNDS = 10;
 export interface UserInformationInterface {
     username: string;
     email: string;
+    favorites: string[];
 }
 
 export interface UserBaseInterface extends UserInformationInterface {
@@ -19,6 +20,8 @@ export interface UserInterface extends UserBaseInterface {
 
 interface UserDocumentInterface extends UserInterface, Document {
     toUserInformation: () => UserInformationInterface;
+    addFavorite: (station: string) => boolean;
+    removeFavorite: (station: string) => boolean;
     setPassword: (password: string) => Promise<void>;
     checkPassword: (password: string) => Promise<boolean>;
 }
@@ -30,11 +33,28 @@ interface UserModelInterface extends Model<UserDocumentInterface> {
 const UserSchema: Schema<UserDocumentInterface> = new Schema({
     username: { type: String, required: true, index: { unique: true } },
     email: { type: String, required: true, index: { unique: true } },
+    favorites: { type: [String], required: true, default: [] },
     hashedPassword: { type: String, required: true },
 });
 
 UserSchema.methods.toUserInformation = function () {
-    return { username: this.username, email: this.email } as UserInformationInterface;
+    return { username: this.username, email: this.email, favorites: this.favorites } as UserInformationInterface;
+};
+
+UserSchema.methods.addFavorite = function (station: string) {
+    if (this.favorites.includes(station)) return false;
+
+    this.favorites.push(station);
+
+    return true;
+};
+
+UserSchema.methods.removeFavorite = function (station: string) {
+    if (!this.favorites.includes(station)) return false;
+
+    this.favorites.pop(station);
+
+    return true;
 };
 
 UserSchema.methods.setPassword = async function (password: string) {

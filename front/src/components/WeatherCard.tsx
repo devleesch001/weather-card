@@ -4,9 +4,7 @@ import logo from '../assets/WeatherAppLogo.gif';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { getWeather, WeatherDataInterface } from '../api/weather';
-import { CardHeader, CardMedia, Grid, Typography } from '@mui/material';
-
-//import WaterTwoToneIcon from '@mui/icons-material/WaterTwoTone';
+import { CardHeader, Grid, Typography } from '@mui/material';
 
 import { grey, yellow } from '@mui/material/colors';
 import {
@@ -36,6 +34,11 @@ export interface WeatherInfoInterface {
     };
 }
 
+export interface WeatherCardInterface {
+    station: string;
+    isUserFav: boolean;
+}
+
 function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoInterface {
     const weatherInfo: WeatherInfoInterface = {
         weatherId: weatherData.weather[0].id ?? 0,
@@ -57,14 +60,14 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
 }
 
 interface WeatherCardProps {
-    stationName: string;
+    weatherCard: WeatherCardInterface;
 }
 const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
-    const { stationName } = Props;
-    const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null); //Hoock
+    const { weatherCard } = Props;
+    const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
-        getWeather(stationName).then((r) => {
+        getWeather(weatherCard.station).then((r) => {
             const data = r.data as WeatherDataInterface;
             const weatherInfo = toWeatherInfoInterface(data);
             setWeather(weatherInfo);
@@ -75,7 +78,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
         <>
             {weather ? (
                 <Card>
-                    <CardHeader>title={stationName}</CardHeader>
+                    <CardHeader>title={weatherCard.station}</CardHeader>
                     <CardContent>
                         <Grid container spacing={1} justifyContent="center" alignItems="center">
                             <Grid item xs={6} style={{ placeItems: 'center' }}>

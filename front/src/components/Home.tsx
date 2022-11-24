@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
 
 import Box from '@mui/material/Box'; // import box
 import MenuAppBar from './MenuAppBar';
-import WeatherhGrid from './WeatherGrid';
+import WeatherGrid from './WeatherGrid';
 import Login from './Login';
-import Profile from '../components/Profile'; //bouton menu
+import Profile from '../components/Profile';
+import { WeatherCardInterface } from './WeatherCard'; //bouton menu
 
 function Home() {
     const [openLoginModal, setOpenLoginModal] = useState(false);
@@ -16,10 +16,12 @@ function Home() {
     const handleOpenProfileModal = () => setOpenProfileModal(true);
     const handleCloseProfileModal = () => setOpenProfileModal(false);
 
-    const [listStation, setListStation] = useState(['paris']);
-    const addListStationHandeler = (station: string) => {
-        listStation.push(station);
-        setListStation(_.uniq(listStation));
+    const [listStation, setListStation] = useState<WeatherCardInterface[]>([{ station: 'paris', isUserFav: false }]);
+    const addListStationHandeler = (stationName: string) => {
+        if (listStation.some((station) => station.station !== stationName)) {
+            listStation.push({ station: stationName, isUserFav: false });
+            setListStation([...listStation]);
+        }
     };
 
     return (
@@ -29,7 +31,7 @@ function Home() {
                 handleProfileModalOpen={handleOpenProfileModal}
                 handleAddListStation={addListStationHandeler}
             />
-            <WeatherhGrid listStation={listStation} />
+            <WeatherGrid listStation={listStation} />
             <Login open={openLoginModal} handleClose={handleCloseLoginModal} />
             <Profile open={openProfileModal} handleClose={handleCloseProfileModal} />
         </Box>

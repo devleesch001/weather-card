@@ -10,12 +10,13 @@ import {
     AcUnitTwoTone,
     AirTwoTone,
     CloudTwoTone,
-    ThunderstormTwoTone,
-    WbSunnyTwoTone,
-    WaterTwoTone,
     StarTwoTone,
+    ThunderstormTwoTone,
+    WaterTwoTone,
+    WbSunnyTwoTone,
 } from '@mui/icons-material';
-import { cardinalPoint, cardinalIntFromDegree } from '../services/Compass';
+import { cardinalIntFromDegree, cardinalPoint } from '../services/Compass';
+import { setFavoris } from '../api/favorite';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -32,11 +33,6 @@ export interface WeatherInfoInterface {
         angle: number;
         gust?: number;
     };
-}
-
-export interface WeatherCardInterface {
-    station: string;
-    isUserFav: boolean;
 }
 
 function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoInterface {
@@ -59,12 +55,18 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
     return weatherInfo;
 }
 
+export interface WeatherCardInterface {
+    station: string;
+    isUserFav: boolean;
+}
+
 interface WeatherCardProps {
     weatherCard: WeatherCardInterface;
+    stationList: WeatherCardInterface[];
     handleFav(stationName: string, stationFav: boolean): void;
 }
 const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
-    const { weatherCard, handleFav } = Props;
+    const { weatherCard, stationList, handleFav } = Props;
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
@@ -80,7 +82,11 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
     function favHandeler(value: boolean) {
         handleFav(weatherCard.station, value);
         setIsFav(value);
+        setFavoris(
+            stationList.filter((favStation) => favStation.isUserFav).map((favStationName) => favStationName.station)
+        ).then();
     }
+
     return (
         <>
             {weather ? (

@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+    front:
+        build: ./front
+        restart: always
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=proxy
+            - traefik.http.routers.wetaher-front.entrypoints=websecure
+            - traefik.http.routers.wetaher-front.rule=Host(`weather.dev-analysis.com`)
+            - traefik.http.routers.wetaher-front.tls.certresolver=resolver
+            - traefik.http.services.wetaher-front.loadbalancer.server.port=80
+        networks:
+            - proxy
+            - default
+
+    back:
+        build: ./back
+        restart: always
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=proxy
+            - traefik.http.routers.wetaher-back.entrypoints=websecure
+            - traefik.http.routers.wetaher-back.rule=Host(`weather.dev-analysis.com`) && PathPrefix(`/api`)
+            - traefik.http.routers.wetaher-back.tls.certresolver=resolver
+            - traefik.http.services.wetaher-back.loadbalancer.server.port=80
+        networks:
+            - proxy
+            - default
+
+networks:
+    proxy:
+        external: true
+    default:
+        external: false

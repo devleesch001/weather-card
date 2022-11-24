@@ -78,6 +78,17 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
         });
     }, []);
 
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            getWeather(weatherCard).then((r) => {
+                const data = r.data as WeatherDataInterface;
+                const weatherInfo = toWeatherInfoInterface(data);
+                setWeather(weatherInfo);
+            });
+        }, 60000);
+        return () => clearInterval(interval);
+    }, []);
+
     const [isFav, setIsFav] = React.useState(weatherCard.isUserFav);
 
     function favHandeler(value: boolean) {
@@ -193,7 +204,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
-                                <WaterTwoTone sx={{ color: 'blue', fontSize: 100, position: 'central' }} />
+                                <WaterTwoTone color={'primary'} sx={{ fontSize: 100, position: 'central' }} />
                             </Grid>
                         </Grid>
                     </CardContent>

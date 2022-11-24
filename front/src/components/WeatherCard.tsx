@@ -61,9 +61,10 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
 
 interface WeatherCardProps {
     weatherCard: WeatherCardInterface;
+    handleFav(stationName: string, stationFav: boolean): void;
 }
 const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
-    const { weatherCard } = Props;
+    const { weatherCard, handleFav } = Props;
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
@@ -74,10 +75,12 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
         });
     }, []);
 
-    function addFavEndler() {
-        //TODO
-    }
+    const [isFav, setIsFav] = React.useState(false);
 
+    function favHandeler(value: boolean) {
+        handleFav(weatherCard.station, value);
+        setIsFav(value);
+    }
     return (
         <>
             {weather ? (
@@ -89,8 +92,12 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             </Typography>
                         }
                         action={
-                            <IconButton>
-                                <StarTwoTone sx={{ color: yellow[500], fontSize: 50 }} onClick={addFavEndler} />
+                            <IconButton onClick={() => favHandeler(!isFav)}>
+                                {isFav ? (
+                                    <StarTwoTone sx={{ color: yellow[500], fontSize: 50 }} />
+                                ) : (
+                                    <StarTwoTone sx={{ color: grey[500], fontSize: 50 }} />
+                                )}
                             </IconButton>
                         }
                     />
@@ -139,7 +146,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'darkred', fontSize: 20 }}>
-                                        Max : {(weather?.temp.tempMax - 273.15).toPrecision(3)}°C
+                                        Max : {(weather.temp.tempMax - 273.15).toPrecision(3)}°C
                                     </span>
                                 </Typography>
                             </Grid>
@@ -161,7 +168,11 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                                         </span>
                                     </Typography>
                                 ) : (
-                                    <></>
+                                    <Typography style={{ cursor: 'default' }}>
+                                        <span style={{ color: 'black', fontSize: 30, opacity: 0.0 }}>
+                                            Dont read me ;)
+                                        </span>
+                                    </Typography>
                                 )}
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">

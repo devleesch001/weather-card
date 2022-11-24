@@ -7,5 +7,10 @@ export const getFavoris = () => {
 };
 
 export const setFavoris = (favoriteList: string[]) => {
-    return axios.post(`${API_URL}/api/favorite`, favoriteList);
+    console.log();
+
+    return axios.post(
+        `${API_URL}/api/favorite`,
+        favoriteList.filter((e) => e !== undefined)
+    );
 };

@@ -68,6 +68,7 @@ interface WeatherCardProps {
 const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
     const { weatherCard, stationList, handleFav } = Props;
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
+    console.log(weatherCard);
 
     React.useEffect(() => {
         getWeather(weatherCard).then((r) => {
@@ -77,7 +78,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
         });
     }, []);
 
-    const [isFav, setIsFav] = React.useState(false);
+    const [isFav, setIsFav] = React.useState(weatherCard.isUserFav);
 
     function favHandeler(value: boolean) {
         handleFav(weatherCard.station, value);

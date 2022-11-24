@@ -66,7 +66,6 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
     const menuId = 'primary-search-account-menu';
 
     const [connected, setConnected] = useState(false);
-
     useEffect(() => {
         setConnected(Boolean(AuthService.getAuthToken()));
     }, [AuthService.getAuthToken()]);

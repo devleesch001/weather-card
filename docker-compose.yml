@@ -24,9 +24,33 @@ services:
             - traefik.http.routers.weather-back.entrypoints=websecure
             - traefik.http.routers.weather-back.rule=Host(`weather.dev-analysis.com`) && PathPrefix(`/api`)
             - traefik.http.routers.weather-back.tls.certresolver=resolver
-            - traefik.http.services.weather-back.loadbalancer.server.port=80
+            - traefik.http.services.weather-back.loadbalancer.server.port=8080
         networks:
             - proxy
+            - default
+
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+            - "27017:27017"
+        volumes:
+            - "./data/db:/data/db"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+        networks:
+            - default
+
+    cache:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+            - '6379:6379'
+        command: redis-server
+        volumes:
+            - "./cache:/data"
+        networks:
             - default
 
 networks:

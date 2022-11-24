@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import { geoCode } from '../api/geoCode';
+import { WeatherCardInterface } from './WeatherCard';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -55,7 +57,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 interface MenuAppBarProps {
     handleLoginModalOpen(): void;
     handleProfileModalOpen(): void;
-    handleAddListStation(station: string): void;
+    handleAddListStation(station: WeatherCardInterface): void;
 }
 
 const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
@@ -64,7 +66,6 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
     const menuId = 'primary-search-account-menu';
 
     const [connected, setConnected] = useState(false);
-
     useEffect(() => {
         setConnected(Boolean(AuthService.getAuthToken()));
     }, [AuthService.getAuthToken()]);
@@ -78,6 +79,18 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    };
+
+    const searchHandler = async (value: string) => {
+        const data = (await geoCode(value)).data[0];
+
+        const info: WeatherCardInterface = {
+            station: data.name,
+            isUserFav: false,
+            location: { lat: data.lat, lon: data.lon },
+        };
+
+        handleAddListStation(info);
     };
 
     const renderMenu = (
@@ -133,7 +146,7 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 const target = e.target as HTMLInputElement;
-                                handleAddListStation(target.value);
+                                searchHandler(target.value);
                                 target.value = '';
                             }
                         }}

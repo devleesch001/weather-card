@@ -4,7 +4,7 @@ import logo from '../assets/WeatherAppLogo.gif';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { getWeather, WeatherDataInterface } from '../api/weather';
-import { CardHeader, CardMedia, Grid, IconButton, Typography } from '@mui/material';
+import { CardHeader, Grid, IconButton, Typography } from '@mui/material';
 import { grey, yellow } from '@mui/material/colors';
 import {
     AcUnitTwoTone,
@@ -16,8 +16,6 @@ import {
     StarTwoTone,
 } from '@mui/icons-material';
 import { cardinalPoint, cardinalIntFromDegree } from '../services/Compass';
-import { useState } from 'react';
-import _ from 'lodash';
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -34,6 +32,11 @@ export interface WeatherInfoInterface {
         angle: number;
         gust?: number;
     };
+}
+
+export interface WeatherCardInterface {
+    station: string;
+    isUserFav: boolean;
 }
 
 function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoInterface {
@@ -57,14 +60,14 @@ function toWeatherInfoInterface(weatherData: WeatherDataInterface): WeatherInfoI
 }
 
 interface WeatherCardProps {
-    stationName: string;
+    weatherCard: WeatherCardInterface;
 }
 const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
-    const { stationName } = Props;
-    const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null); //Hoock
+    const { weatherCard } = Props;
+    const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
-        getWeather(stationName).then((r) => {
+        getWeather(weatherCard.station).then((r) => {
             const data = r.data as WeatherDataInterface;
             const weatherInfo = toWeatherInfoInterface(data);
             setWeather(weatherInfo);
@@ -82,7 +85,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                     <CardHeader
                         title={
                             <Typography variant="h3" gutterBottom>
-                                {stationName}
+                                {weatherCard.station}
                             </Typography>
                         }
                         action={

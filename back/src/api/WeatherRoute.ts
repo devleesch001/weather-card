@@ -4,6 +4,17 @@ import RedisService from '~/services/RedisService';
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/weather:
+ *  get:
+ *      description: get weather from lat and lon.
+ *      responses:
+ *          200:
+ *              description: Returns list of object
+ *          500:
+ *              description: Bad request query not valide
+ */
 router.get('/', async (request: Request, response) => {
     const query = request.query;
     const lat = Number(query['lat']);

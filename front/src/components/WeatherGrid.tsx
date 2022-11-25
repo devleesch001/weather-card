@@ -25,7 +25,7 @@ const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
                 ) : (
                     <Box m={5}>
                         <Typography>
-                            Aucune carte, vous pouvez chercher une ville dans la barre de recherche pour en ajoutée.
+                            Aucune carte, vous pouvez chercher une ville dans la barre de recherche pour en ajouter.
                         </Typography>
                     </Box>
                 )}

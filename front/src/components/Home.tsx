@@ -46,7 +46,6 @@ function Home() {
 
                 data.forEach((element) => {
                     geoCode(element).then((r) => {
-                        console.log(r.data[0]);
                         addListStationHandeler(geoCodeToWeatherCardInterface(r.data[0], true));
                     });
                 });

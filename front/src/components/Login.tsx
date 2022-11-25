@@ -52,13 +52,11 @@ const LoginForm: React.FC<{ handleClose(): void }> = (Props) => {
         AuthService.login(email, password)
             .then((r) => {
                 const token = r.data.token;
-                console.log(token);
                 AuthService.setAuthToken(token);
                 setAuthStatus('success');
                 closeHandler();
             })
             .catch(() => {
-                console.log('error');
                 setAuthStatus('error');
             });
     };

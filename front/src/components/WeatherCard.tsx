@@ -124,7 +124,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             <Grid item xs={6} style={{ placeItems: 'center' }}>
                                 <Typography>
                                     <span style={{ color: 'gold', fontSize: 50 }}>
-                                        {(weather.temp.temperature - 273.15).toPrecision(3)}°C
+                                        {(weather.temp.temperature - 273.15).toPrecision(2)}°C
                                     </span>
                                 </Typography>
                             </Grid>
@@ -150,28 +150,28 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                             <Grid item xs={12}>
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 30 }}>
-                                        ressenti: {(weather.temp.tempFeel - 273.15).toPrecision(3)}°C
+                                        ressenti: {(weather.temp.tempFeel - 273.15).toPrecision(2)}°C
                                     </span>
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'darkblue', fontSize: 20 }}>
-                                        Min :{(weather.temp.tempMin - 273.15).toPrecision(3)}°C
+                                        Min :{(weather.temp.tempMin - 273.15).toPrecision(2)}°C
                                     </span>
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'darkred', fontSize: 20 }}>
-                                        Max : {(weather.temp.tempMax - 273.15).toPrecision(3)}°C
+                                        Max : {(weather.temp.tempMax - 273.15).toPrecision(2)}°C
                                     </span>
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center" alignItems="center">
                                 <Typography>
                                     <span style={{ color: 'black', fontSize: 28 }}>
-                                        {(weather.wind.speed * 3.6).toPrecision(3)} km/H
+                                        {(weather.wind.speed * 3.6).toPrecision(2)} km/H
                                     </span>
                                 </Typography>
                                 <Typography>
@@ -183,7 +183,7 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
                                 {weather.wind.gust ? (
                                     <Typography>
                                         <span style={{ color: 'black', fontSize: 28 }}>
-                                            {(weather.wind.gust * 3.6).toPrecision(3)} km/H
+                                            {(weather.wind.gust * 3.6).toPrecision(2)} km/H
                                         </span>
                                     </Typography>
                                 ) : (

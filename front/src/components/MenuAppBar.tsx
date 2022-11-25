@@ -142,11 +142,11 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
                         <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
-                        placeholder="Search…"
+                        placeholder="Paris, Nice…"
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 const target = e.target as HTMLInputElement;
-                                searchHandler(target.value);
+                                searchHandler(target.value).then();
                                 target.value = '';
                             }
                         }}
@@ -170,7 +170,7 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
                     ) : (
                         <>
                             <Button variant="contained" disableElevation onClick={handleLoginModalOpen}>
-                                Sign-In
+                                <Typography noWrap>Sign-In</Typography>
                             </Button>
                         </>
                     )}

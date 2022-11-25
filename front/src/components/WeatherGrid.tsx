@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import { Typography } from '@mui/material';
+
 import WeatherCard, { WeatherCardInterface } from './WeatherCard';
 
 interface WeatherGridProps {
@@ -14,11 +16,19 @@ const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
     return (
         <Box sx={{ flexGrow: 1 }} margin={2}>
             <Grid container spacing={2} alignItems="center" justifyContent="center">
-                {listStation.map((station, index, stationList) => (
-                    <Grid item md={6} lg={4} key={index}>
-                        <WeatherCard weatherCard={station} handleFav={handleFav} stationList={stationList} />
-                    </Grid>
-                ))}
+                {listStation.length > 0 ? (
+                    listStation.map((station, index, stationList) => (
+                        <Grid item md={6} lg={4} key={index}>
+                            <WeatherCard weatherCard={station} handleFav={handleFav} stationList={stationList} />
+                        </Grid>
+                    ))
+                ) : (
+                    <Box m={5}>
+                        <Typography>
+                            Aucune card ajoutait veilleur chercher une ville dans la barre de recherche
+                        </Typography>
+                    </Box>
+                )}
             </Grid>
         </Box>
     );

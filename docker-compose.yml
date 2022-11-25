@@ -14,6 +14,8 @@ services:
         networks:
             - proxy
             - default
+        depends_on:
+            - back
 
     back:
         build: ./back
@@ -28,12 +30,13 @@ services:
         networks:
             - proxy
             - default
+        depends_on:
+            - mongo
+            - cache
 
     mongo:
         image: mongo
         restart: always
-        ports:
-            - "27017:27017"
         volumes:
             - "./data/db:/data/db"
         environment:
@@ -45,11 +48,7 @@ services:
     cache:
         image: redis:6.2-alpine
         restart: always
-        ports:
-            - '6379:6379'
         command: redis-server
-        volumes:
-            - "./cache:/data"
         networks:
             - default
 

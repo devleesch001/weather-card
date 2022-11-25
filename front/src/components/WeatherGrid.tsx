@@ -25,7 +25,7 @@ const WeatherGrid: React.FC<WeatherGridProps> = (Props) => {
                 ) : (
                     <Box m={5}>
                         <Typography>
-                            Aucune card ajoutait veilleur chercher une ville dans la barre de recherche
+                            Aucune carte, vous pouvez chercher une ville dans la barre de recherche pour en ajoutée.
                         </Typography>
                     </Box>
                 )}

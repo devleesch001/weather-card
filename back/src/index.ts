@@ -7,6 +7,8 @@ import ApiIndex from './api/index';
 import MangoDBService from '~/services/MangoDBService';
 import RedisService from '~/services/RedisService';
 
+dotenv.config({ path: '.env.local', override: true });
+
 MangoDBService.init()
     .then(() => console.log('mangodb init'))
     .catch((err) => console.log(err));

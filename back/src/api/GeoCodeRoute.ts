@@ -13,6 +13,17 @@ export interface GeocodingInterface {
     state?: string;
 }
 
+/**
+ * @openapi
+ * /api/geoCode:
+ *  get:
+ *      description: get all location match with name.
+ *      responses:
+ *          200:
+ *              description: Returns list of object
+ *          401:
+ *              invalid credentials
+ */
 router.get('/', async (request: Request, response) => {
     const query = request.query;
     const search = query['search'] as string;

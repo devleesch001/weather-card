@@ -20,7 +20,15 @@ router.get('/', auth, async (req, res) => {
 });
 
 /**
- * create new user
+ * @openapi
+ * /api/user:
+ *  get:
+ *      description: create new user.
+ *      responses:
+ *          200:
+ *              description: Returns list of object
+ *          401:
+ *              invalid credentials
  */
 router.post(
     '/',

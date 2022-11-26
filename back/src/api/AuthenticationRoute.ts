@@ -5,6 +5,17 @@ import { body, validationResult } from 'express-validator';
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/auth/login:
+ *  post:
+ *      description: login route!
+ *      responses:
+ *          401:
+ *              description: "{message: 'invalid credentials'}"
+ *          200:
+ *              description: "{token: 'accessToken'}"
+ */
 router.post(
     '/login',
     body('email').isEmail().isLength({ min: 5, max: 128 }),
@@ -20,7 +31,7 @@ router.post(
         const password = req.body['password'];
 
         if (!(await user.checkPassword(password))) {
-            res.status(401).send({ message: 'invalid password' });
+            res.status(401).send({ message: 'invalid credentials' });
             return;
         }
 
@@ -33,6 +44,15 @@ router.post(
     }
 );
 
+/**
+ * @openapi
+ * /api/auth/register:
+ *  post:
+ *      description: Register route use for user want to be created an account!
+ *      responses:
+ *          200:
+ *              description: Returns status of api
+ */
 router.post(
     '/register',
     body('email').isEmail().isLength({ min: 5, max: 128 }),
@@ -58,7 +78,7 @@ router.post(
                 res.status(201).send({ user: user.toUserInformation(), token: accessToken });
             })
             .catch(() => {
-                res.status(400);
+                res.status(500);
                 res.send({ message: 'failed' });
             });
     }

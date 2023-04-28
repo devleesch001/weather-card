@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "ESNext",
         "lib": [
             "dom",
             "dom.iterable",
-            "esnext"
+            "esnext",
+            "WebWorker"
         ],
-        "allowJs": true,
+        "useDefineForClassFields": true,
+        "allowJs": false,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
@@ -20,7 +22,7 @@
         "noEmit": true,
         "jsx": "react-jsx",
     },
-    "include": [
-        "src"
-    ]
+    "include": ["src"],
+    "types": ["vite/client"],
+    "references": [{ "path": "./tsconfig.node.json" }]
 }

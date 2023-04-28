@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL ?? 'http://10.3.2.54:8080';
+const API_URL = import.meta.env.VITE_APP_API_URL ?? 'http://10.3.2.54:8080';
 
 export const getFavoris = () => {
     return axios.get(`${API_URL}/api/favorite`);

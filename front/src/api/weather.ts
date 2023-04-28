@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { WeatherCardInterface } from '../components/WeatherCard';
 
-const API_URL = process.env.REACT_APP_API_URL ?? 'http://10.3.2.54:8080';
+const API_URL = import.meta.env.VITE_APP_API_URL ?? 'http://10.3.2.54:8080';
 
 export interface WeatherDataInterface {
     coord: {

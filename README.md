@@ -1,6 +1,6 @@
 # WeatherCard
 
-## Objective 
+## Objective
 
 create a React and Express application to display the weather.
 
@@ -13,7 +13,7 @@ This application must have user management.
 ![demo](assests/front-screen.png)
 
 -----
-#### schema of component : 
+#### schema of component :
 
 ![schema of components](assests/schema-react.png)
 
@@ -46,7 +46,7 @@ This application must have user management.
 
 ![redis-bench](assests/redis-bench.png)
 
-## Deploying 
+## Deploying
 
 ![docker-architecture](assests/docker-architecture.png)
 

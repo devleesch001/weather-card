@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'front/**'
+      - '.github/workflows/front.yml'
   pull_request:
     paths:
       - 'front/**'
+      - '.github/workflows/front.yml'
 
 jobs:
   build:

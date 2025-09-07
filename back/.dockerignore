@@ -1,9 +1,4 @@
 node_modules
-src
-Dockerfile
-tsconfig.json
-@types
 *.log
 .env
 README.md
-

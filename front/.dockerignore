@@ -1,13 +1,5 @@
 node_modules
-src
-Dockerfile
-tsconfig.json
-tsconfig.node.json
-vite.config.ts
-.eslintrc.json
-.prettierrc
-.gitignore
+*.log
 .env
 README.md
-public
-
+.git

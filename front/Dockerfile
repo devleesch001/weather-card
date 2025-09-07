@@ -1,23 +1,25 @@
-ARG NODE_VERSION=18
-ARG NPM_VERSION=8.6.0
+# Étape 1 : build
+FROM node:22-alpine AS builder
 
-FROM node:${NODE_VERSION}
-
-WORKDIR /usr/src/app
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+WORKDIR /app
 
 COPY package*.json ./
 
-ENV NODE_ENV=production
-
-RUN npm install -g npm@${NPM_VERSION}
-RUN npm install -g serve
 RUN npm ci --only=production
 
 COPY . ./
 
 RUN npm run build
 
+# Étape 2 : image finale pour servir le build
+FROM node:22-alpine AS production
+
+WORKDIR /app
+
+RUN npm install -g serve
+
+COPY --from=builder /app/build ./build
+
 EXPOSE 80
 
-CMD serve -s build -l 80
+CMD ["serve", "-s", "build", "-l", "80"]

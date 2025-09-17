@@ -82,7 +82,6 @@ const LoginForm: React.FC<{ handleClose(): void }> = (Props) => {
                     required
                     fullWidth
                     type="email"
-                    id="email"
                     label="Email Address"
                     name="email"
                     autoComplete="email"
@@ -95,7 +94,6 @@ const LoginForm: React.FC<{ handleClose(): void }> = (Props) => {
                     name="password"
                     label="Password"
                     type="password"
-                    id="password"
                     autoComplete="current-password"
                 />
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
@@ -157,7 +155,6 @@ const RegisterForm: React.FC<{ handleClose(): void }> = (Props) => {
                     required
                     fullWidth
                     type="email"
-                    id="email"
                     label="Email Address"
                     name="email"
                     autoComplete="email"
@@ -168,7 +165,6 @@ const RegisterForm: React.FC<{ handleClose(): void }> = (Props) => {
                     required
                     fullWidth
                     type="text"
-                    id="email"
                     label="Username"
                     name="username"
                     autoComplete="username"
@@ -181,7 +177,6 @@ const RegisterForm: React.FC<{ handleClose(): void }> = (Props) => {
                     name="password"
                     label="Password"
                     type="password"
-                    id="password"
                     autoComplete="current-password"
                 />
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />

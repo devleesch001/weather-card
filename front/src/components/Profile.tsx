@@ -1,5 +1,5 @@
 import React from 'react';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 import { getAuthToken, UserInformationInterface } from '../services/AuthentificationService';
 
@@ -19,9 +19,11 @@ const Profile: React.FC<ProfileProps> = (Props) => {
 
     const token = getAuthToken() ?? '';
 
-    if (token == '') {
-        handleClose();
-    }
+    React.useEffect(() => {
+        if (open && token === '') {
+            handleClose();
+        }
+    }, [open, token, handleClose]);
 
     try {
         const user = jwtDecode<UserInformationInterface>(token);
@@ -53,7 +55,6 @@ const Profile: React.FC<ProfileProps> = (Props) => {
                                     required
                                     fullWidth
                                     type="email"
-                                    id="email"
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
@@ -68,7 +69,6 @@ const Profile: React.FC<ProfileProps> = (Props) => {
                                     name="username"
                                     label="username"
                                     type="text"
-                                    id="username"
                                     autoComplete="current-username"
                                     defaultValue={user?.username}
                                 />
@@ -78,7 +78,7 @@ const Profile: React.FC<ProfileProps> = (Props) => {
                 </Box>
             </Modal>
         );
-    } catch (e) {
+    } catch {
         return <></>;
     }
 };

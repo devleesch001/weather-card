@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_APP_API_URL ?? 'http://localhost:8080';
+import { API_URL } from '../api/config';
 
 export const setAuthToken = (token: string) => {
     localStorage.setItem('token', token);

@@ -31,6 +31,31 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api', ApiIndex);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
+
+// Graceful shutdown
+const shutdown = async () => {
+    console.log('INFO  Gracefully shutting down. Please wait...');
+    server.close(async (err) => {
+        if (err) {
+            console.error('Error closing HTTP server:', err);
+            process.exit(1);
+        }
+        try {
+            await MangoDBService.close?.();
+        } catch (e) {
+            console.error('Error closing MongoDB:', e);
+        }
+        try {
+            await RedisService.close?.();
+        } catch (e) {
+            console.error('Error closing Redis:', e);
+        }
+        process.exit(0);
+    });
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

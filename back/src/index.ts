@@ -1,13 +1,16 @@
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local', override: true });
+dotenv.config();
+
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
 import ApiIndex from './api/index';
 import MangoDBService from '~/services/MangoDBService';
 import RedisService from '~/services/RedisService';
-
-dotenv.config({ path: '.env.local', override: true });
+import mongoose from 'mongoose';
 
 MangoDBService.init()
     .then(() => console.log('mangodb init'))
@@ -16,8 +19,6 @@ MangoDBService.init()
 RedisService.init()
     .then(() => console.log('redis init'))
     .catch((err) => console.log(err));
-
-dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -44,12 +45,12 @@ const shutdown = async () => {
             process.exit(1);
         }
         try {
-            await MangoDBService.close?.();
+            await mongoose.disconnect();
         } catch (e) {
             console.error('Error closing MongoDB:', e);
         }
         try {
-            await RedisService.close?.();
+            await RedisService.client?.close?.();
         } catch (e) {
             console.error('Error closing Redis:', e);
         }

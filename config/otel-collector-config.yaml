@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: "0.0.0.0:4318" # Écoute ton app Node
+
+exporters:
+  otlp/jaeger:
+    endpoint: "jaeger:4317" # Envoie les traces à Jaeger
+    tls:
+      insecure: true
+  prometheusremotewrite:
+    endpoint: "http://prometheus:9090/api/v1/write"
+
+processors:
+  batch: # Optimise l'envoi des données en lots
+
+service:
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp/jaeger ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ prometheusremotewrite ]

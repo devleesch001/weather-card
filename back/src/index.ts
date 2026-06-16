@@ -14,16 +14,16 @@ import cors from 'cors';
 import ApiIndex from './api/index';
 import MangoDBService from '~/services/MangoDBService';
 import RedisService from '~/services/RedisService';
-import mongoose, {Error} from 'mongoose';
+import mongoose from 'mongoose';
 
 function initDatabases() {
     return Promise.all([
         MangoDBService.init()
-            .then(() => console.log('mangodb init'))
+            .then(() => console.info('Mangodb init'))
             .catch((err) => Promise.reject(new Error(`Failed to connect to MongoDB: ${err}`))),
 
         RedisService.init()
-            .then(() => console.log('redis init'))
+            .then(() => console.info('Redis init'))
             .catch((err) => Promise.reject(new Error(`Failed to connect to Redis: ${err}`))),
     ]);
 }
@@ -32,12 +32,12 @@ function closeDatabases() {
     return Promise.all([
         mongoose
             .disconnect()
-            .then(() => console.log('mangodb closed'))
+            .then(() => console.info('Mangodb closed'))
             .catch((err) => Promise.reject(new Error(`Failed to close MongoDB: ${err}`))),
 
         // On gère le cas où le client n'existerait pas avec un fallback sur Promise.resolve()
         (RedisService.client?.close?.() || Promise.resolve())
-            .then(() => console.log('redis closed'))
+            .then(() => console.info('Redis closed'))
             .catch((err) => Promise.reject(new Error(`Failed to close Redis: ${err}`))),
     ]);
 }
@@ -61,13 +61,13 @@ async function bootstrap() {
         console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
     });
 
-    const shutdown = async () => {
+    const shutdown = () => {
         console.log('INFO  Gracefully shutting down. Please wait...');
-        server.close(async (err) => {
+        server.close((err) => {
             if (err) {
                 console.error('HTTP server Error closing', err);
             } else {
-                console.log('HTTP server closed');
+                console.info('HTTP server closed');
             }
 
             closeDatabases()

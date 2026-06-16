@@ -1,0 +1,27 @@
+name: weather-card-otel
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:1.76.0
+    ports:
+      - "16686:16686"
+      - "4317"
+
+  prometheus:
+    image: prom/prometheus:v3
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command: [ "--web.enable-remote-write-receiver", "--config.file=/etc/prometheus/prometheus.yml" ]
+    ports:
+      - "9090:9090"
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4318:4318"
+    depends_on:
+      - jaeger
+      - prometheus

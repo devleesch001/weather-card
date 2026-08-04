@@ -47,7 +47,12 @@ async function bootstrap() {
     await initDatabases();
 
     const app = express();
-    app.use(cors());
+    app.use(
+        cors({
+            allowedHeaders: ['Content-Type', 'Authorization', 'traceparent', 'tracestate'],
+            exposedHeaders: ['traceparent'],
+        })
+    );
     app.use(morgan('combined'));
 
     app.use('/api', TelemetryRoute)

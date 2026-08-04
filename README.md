@@ -10,6 +10,7 @@ A modern, full-stack weather application built with React and Express.js that pr
 - **Progressive Web App (PWA)**: Install and use offline on any device
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Redis Caching**: Fast weather data retrieval with intelligent caching
+- **End-to-End Observability (OpenTelemetry)**: Full-stack distributed tracing and metrics from React UI down to Express, MongoDB, and Redis
 - **REST API**: Full-featured API with Swagger documentation
 
 ## 🚀 Live Demo
@@ -43,8 +44,9 @@ The application follows a microservices architecture with:
 - **Material-UI (MUI)** for UI components
 - **Vite** for build tooling and development
 - **PWA** support with service workers
-- **Axios** for API communication
+- **Axios** for API communication with W3C `traceparent` propagation
 - **JWT** for authentication
+- **OpenTelemetry Web SDK** (`@opentelemetry/sdk-trace-web`, `@opentelemetry/auto-instrumentations-web`)
 
 ### Backend
 - **Express.js** with TypeScript
@@ -54,12 +56,15 @@ The application follows a microservices architecture with:
 - **JWT** for authentication
 - **Swagger** for API documentation
 - **express-validator** for input validation
+- **OpenTelemetry Node SDK** (`@opentelemetry/sdk-node`, `@opentelemetry/auto-instrumentations-node`)
 
-### DevOps & Deployment
+### Observability & DevOps
+- **OpenTelemetry Collector** for trace & metric aggregation
+- **Jaeger** for distributed tracing visualization
+- **Prometheus** for metric collection and monitoring
 - **Docker** & Docker Compose
 - **Traefik** reverse proxy
 - **Multi-stage Docker builds**
-- **Production-ready configuration**
 
 ## 📋 Prerequisites
 
@@ -173,6 +178,31 @@ The application uses Redis for efficient weather data caching:
 - **Automatic expiration**: Cache expires to ensure fresh data
 - **Performance**: Sub-second response times for cached data
 
+## 📊 Observability & OpenTelemetry (OTel)
+
+WeatherCard includes end-to-end distributed tracing and metrics powered by **OpenTelemetry**:
+
+- **End-to-End Tracing**: User actions in React (e.g. searching a location in `MenuAppBar`) generate an active span that propagates across HTTP calls to Express, MongoDB, and Redis using W3C `traceparent` headers.
+- **Frontend Telemetry**: Automated Web instrumentation collects user interactions, navigation timings, and fetch/XHR requests via `@opentelemetry/sdk-trace-web`.
+- **Backend Telemetry**: Node SDK auto-instruments Express routes, HTTP requests, MongoDB queries, and Redis commands.
+- **Metrics & Traces Collection**: Traces and metrics are proxied through `/api/telemetry/*` to the **OpenTelemetry Collector**, which routes them to **Jaeger** and **Prometheus**.
+
+### Starting the Observability Stack
+
+Run the development observability stack (Jaeger, Prometheus, OTel Collector) with:
+
+```bash
+docker compose -f compose.dev.yaml up -d
+```
+
+### Dashboards & Interfaces
+
+| Tool | URL | Description |
+| :--- | :--- | :--- |
+| **Jaeger UI** | [http://localhost:16686](http://localhost:16686) | Distributed tracing UI to visualize request flows |
+| **Prometheus UI** | [http://localhost:9090](http://localhost:9090) | Metrics collection and PromQL querying |
+| **OTel Collector** | `http://localhost:4318` | OpenTelemetry Collector OTLP HTTP receiver |
+
 ## 🐳 Docker Architecture
 
 ![Docker Architecture](docs/docker-architecture.png)
@@ -212,6 +242,11 @@ MANGODB_URL=mongodb://root:example@mongo:27017
 
 # Redis Cache Configuration
 REDIS_URL=redis://cache:6379
+
+# OpenTelemetry & Observability Configuration
+OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+OTEL_TRACES_EXPORTER=otlp
+OTEL_METRICS_EXPORTER=otlp
 ```
 
 #### Frontend (.env)
@@ -279,6 +314,8 @@ This project is licensed under the **GNU Affero General Public License v3.0** - 
 - [Material-UI](https://mui.com/) for React components
 - [MongoDB](https://www.mongodb.com/) for database solution
 - [Redis](https://redis.io/) for caching capabilities
+- [OpenTelemetry](https://opentelemetry.io/) for end-to-end distributed tracing & metrics framework
+- [Jaeger](https://www.jaegertracing.io/) & [Prometheus](https://prometheus.io/) for trace visualization and metrics collection
 
 ## 📞 Support
 

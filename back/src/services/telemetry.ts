@@ -8,7 +8,17 @@ import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
+import { ATTR_SERVICE_NAMESPACE } from '@opentelemetry/sdk-node/build/src/semconv';
 
+interface TelemetryConfig {
+    tracesUrl?: string;
+    tracesHeaders?: Record<string, string>;
+    metricsUrl?: string;
+    metricsHeaders?: Record<string, string>;
+}
+
+
+// WIP
 function parseHeaders(envVarName: string) {
     const value = process.env[envVarName];
     if (!value) return {};
@@ -24,29 +34,23 @@ function parseHeaders(envVarName: string) {
 function start() {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
 
+    if (!process.env.OTEL_TRACES_EXPORTER) {
+        process.env.OTEL_TRACES_EXPORTER = 'none';
+    }
+
+    if (!process.env.OTEL_METRICS_EXPORTER) {
+        process.env.OTEL_METRICS_EXPORTER = 'none';
+    }
+
+    if (!process.env.OTEL_LOGS_EXPORTER) {
+        process.env.OTEL_LOGS_EXPORTER = 'none';
+    }
+
     const sdk = new NodeSDK({
         resource: resourceFromAttributes({
-            [ATTR_SERVICE_NAME]: 'weather-card-api',
+            [ATTR_SERVICE_NAMESPACE]: 'weather-card',
+            [ATTR_SERVICE_NAME]: 'api',
         }),
-        traceExporter: process.env.OTLP_TRACES_URL
-            ? new OTLPTraceExporter({
-                  url: process.env.OTLP_TRACES_URL,
-                  headers: parseHeaders('OTLP_TRACES_HEADERS'),
-              })
-            : undefined,
-        metricReaders: process.env.OTLP_METRICS_URL
-            ? [
-                  new PeriodicExportingMetricReader({
-                      exporter: new OTLPMetricExporter({
-                          url: process.env.OTLP_METRICS_URL,
-                          headers: parseHeaders('OTLP_METRICS_HEADERS'),
-                      }),
-                      exportIntervalMillis: 10000,
-                      exportTimeoutMillis: 10000,
-                  }),
-              ]
-            : undefined,
-
         instrumentations: [getNodeAutoInstrumentations()],
     });
 

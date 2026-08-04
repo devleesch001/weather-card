@@ -13,6 +13,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import { geoCode } from '../api/geoCode';
 import { WeatherCardInterface } from './WeatherCard';
+import { trace, SpanStatusCode } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('react-AppBar');
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -82,15 +85,28 @@ const MenuAppBar: React.FC<MenuAppBarProps> = (Props) => {
     };
 
     const searchHandler = async (value: string) => {
-        const data = (await geoCode(value)).data[0];
+        return tracer.startActiveSpan('search', async (span) => {
+            try {
+                span.setAttribute('value', value);
+                span.setAttribute('action.type', 'search');
 
-        const info: WeatherCardInterface = {
-            station: data.name,
-            isUserFav: false,
-            location: { lat: data.lat, lon: data.lon },
-        };
+                const data = (await geoCode(value)).data[0];
 
-        handleAddListStation(info);
+                const info: WeatherCardInterface = {
+                    station: data.name,
+                    isUserFav: false,
+                    location: { lat: data.lat, lon: data.lon },
+                };
+
+                handleAddListStation(info);
+                span.setStatus({ code: SpanStatusCode.OK });
+            } catch (err) {
+                span.setStatus({ code: SpanStatusCode.ERROR, message: (err as Error)?.message });
+                span.recordException(err as Error);
+            } finally {
+                span.end();
+            }
+        });
     };
 
     const renderMenu = (

@@ -18,6 +18,9 @@ import {
 import { cardinalIntFromDegree, cardinalPoint } from '../services/Compass';
 import { setFavoris } from '../api/favorite';
 import ExploreIcon from '@mui/icons-material/Explore';
+import { SpanStatusCode, trace } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('react-WeatherCard');
 
 // interface pour information utilise
 export interface WeatherInfoInterface {
@@ -70,19 +73,43 @@ const WeatherCard: React.FC<WeatherCardProps> = (Props) => {
     const [weather, setWeather] = React.useState<WeatherInfoInterface | null>(null);
 
     React.useEffect(() => {
-        getWeather(weatherCard).then((r) => {
-            const data = r.data as WeatherDataInterface;
-            const weatherInfo = toWeatherInfoInterface(data);
-            setWeather(weatherInfo);
+        tracer.startActiveSpan('getWeather', async (span) => {
+            try {
+                span.setAttribute('value.station', weatherCard.station);
+                span.setAttribute('value.location', `${weatherCard.location.lon}, ${weatherCard.location.lat}`);
+                span.setAttribute('action.type', 'init-fetch');
+
+                const r = await getWeather(weatherCard);
+                const data = r.data as WeatherDataInterface;
+                const weatherInfo = toWeatherInfoInterface(data);
+                setWeather(weatherInfo);
+            } catch (err) {
+                span.setStatus({ code: SpanStatusCode.ERROR, message: (err as Error)?.message });
+                span.recordException(err as Error);
+            } finally {
+                span.end();
+            }
         });
     }, []);
 
     React.useEffect(() => {
         const interval = setInterval(() => {
-            getWeather(weatherCard).then((r) => {
-                const data = r.data as WeatherDataInterface;
-                const weatherInfo = toWeatherInfoInterface(data);
-                setWeather(weatherInfo);
+            tracer.startActiveSpan('getWeather', async (span) => {
+                try {
+                    span.setAttribute('value.station', weatherCard.station);
+                    span.setAttribute('value.location', `${weatherCard.location.lon}, ${weatherCard.location.lat}`);
+                    span.setAttribute('action.type', 'auto-fetch');
+
+                    const r = await getWeather(weatherCard);
+                    const data = r.data as WeatherDataInterface;
+                    const weatherInfo = toWeatherInfoInterface(data);
+                    setWeather(weatherInfo);
+                } catch (err) {
+                    span.setStatus({ code: SpanStatusCode.ERROR, message: (err as Error)?.message });
+                    span.recordException(err as Error);
+                } finally {
+                    span.end();
+                }
             });
         }, 60000);
         return () => clearInterval(interval);

@@ -15,6 +15,7 @@ import MangoDBService from '~/services/MangoDBService';
 import RedisService from '~/services/RedisService';
 import mongoose from 'mongoose';
 import morgan from "morgan";
+import TelemetryRoute from "~/api/TelemetryRoute";
 
 function initDatabases() {
     return Promise.all([
@@ -48,6 +49,9 @@ async function bootstrap() {
     const app = express();
     app.use(cors());
     app.use(morgan('combined'));
+
+    app.use('/api', TelemetryRoute)
+
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ limit: '10mb', extended: true }));
 

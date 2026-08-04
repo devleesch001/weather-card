@@ -4,7 +4,6 @@ import WeatherRoute from './WeatherRoute';
 import Authentication from './AuthenticationRoute';
 import FavoriteRoute from './FavoriteRoute';
 import GeoCodeRoute from './GeoCodeRoute';
-import TelemetryRoute from './TelemetryRoute';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -22,8 +21,6 @@ const router = Router();
 router.get('/', (request, response) => {
     response.send({ message: { api: 'ok' } });
 });
-
-router.use('/', TelemetryRoute);
 
 router.use('/auth', Authentication);
 router.use('/user', UserRoute);

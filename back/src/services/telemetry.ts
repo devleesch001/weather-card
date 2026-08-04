@@ -3,33 +3,8 @@ import process from 'process';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { resourceFromAttributes } from '@opentelemetry/resources';
-import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
-import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
-import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-proto';
+import { ATTR_SERVICE_NAME, ATTR_SERVICE_NAMESPACE } from '@opentelemetry/semantic-conventions';
 import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
-import { ATTR_SERVICE_NAMESPACE } from '@opentelemetry/sdk-node/build/src/semconv';
-
-interface TelemetryConfig {
-    tracesUrl?: string;
-    tracesHeaders?: Record<string, string>;
-    metricsUrl?: string;
-    metricsHeaders?: Record<string, string>;
-}
-
-
-// WIP
-function parseHeaders(envVarName: string) {
-    const value = process.env[envVarName];
-    if (!value) return {};
-
-    try {
-        return JSON.parse(value);
-    } catch (e) {
-        console.error(`Error: ${envVarName} env need to be a valid JSON.`);
-        return {};
-    }
-}
 
 function start() {
     diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);

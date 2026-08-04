@@ -3,12 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local', override: true });
 dotenv.config();
 
-import tracing from '~/services/tracing';
+import tracing from '~/services/telemetry';
 
 tracing.start();
 
 import express, { Request, Response } from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import ApiIndex from './api/index';
@@ -47,7 +46,8 @@ async function bootstrap() {
 
     const app = express();
     app.use(cors());
-    app.use(bodyParser.json());
+    app.use(express.json({ limit: '10mb' }));
+    app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
     const port = process.env.PORT;
 

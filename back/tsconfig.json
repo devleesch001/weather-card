@@ -1,10 +1,9 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
-        "target": "esnext",
-        "module": "esnext",
+        "target": "es2022",
+        "module": "commonjs",
+        "moduleResolution": "bundler",
         "lib": ["esnext"],
-        "moduleResolution": "nodenext",
         "esModuleInterop": true,
         "strict": true,
         "strictNullChecks": true,
@@ -18,10 +17,6 @@
             "~/*": ["./src/*"],
             "~~/*": ["./*"]
         }
-    },
-    "ts-node": {
-        "files": true,
-        "require": ["tsconfig-paths/register"]
     },
     "typeRoots": [
         "@types",

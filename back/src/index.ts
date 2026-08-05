@@ -1,21 +1,14 @@
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local', override: true });
-dotenv.config();
-
-import tracing from '~/services/telemetry';
-
-tracing.start();
+import '~/config';
+import '~/services/telemetry';
 
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-
-import ApiIndex from './api/index';
+import ApiIndex from '~/api/index';
 import MangoDBService from '~/services/MangoDBService';
 import RedisService from '~/services/RedisService';
 import mongoose from 'mongoose';
-import morgan from "morgan";
-import TelemetryRoute from "~/api/TelemetryRoute";
+import morgan from 'morgan';
+import TelemetryRoute from '~/api/TelemetryRoute';
 
 function initDatabases() {
     return Promise.all([
@@ -55,7 +48,7 @@ async function bootstrap() {
     );
     app.use(morgan('combined'));
 
-    app.use('/api', TelemetryRoute)
+    app.use('/api', TelemetryRoute);
 
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ limit: '10mb', extended: true }));

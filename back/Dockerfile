@@ -1,5 +1,5 @@
 # Étape 1 : build
-FROM node:22 AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY tsconfig.json ./
 RUN npm run build
 
 # Étape 2 : image finale
-FROM node:22 AS production
+FROM node:24-alpine AS production
 
 WORKDIR /app
 

@@ -1,33 +1,28 @@
 import { Router } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import process from "process";
+import config from '~/config';
 
 const router = Router();
 
-
-function isAllow(v?: string) {
-    return v === 'true' || v === '1' || v === 'on' || v === 'y'
-}
-
-if (process.env.OTEL_EXPORTER_OTLP_ENDPOINT && isAllow(process.env.OTEL_EXPORTER_ALLOW_PROXY)) {
-    if (process.env.OTEL_TRACES_EXPORTER === 'otlp') {
+if (config.otel.endpoint && config.otel.allowProxy) {
+    if (config.otel.tracesExporter === 'otlp') {
         console.info('Initialize OTEL traces Proxy');
         router.use(
             '/telemetry/traces',
             createProxyMiddleware({
-                target: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+                target: config.otel.endpoint,
                 changeOrigin: true,
                 pathRewrite: (path, req) => '/v1/traces',
             })
         );
     }
 
-    if (process.env.OTEL_METRICS_EXPORTER === 'otlp') {
+    if (config.otel.metricsExporter === 'otlp') {
         console.info('Initialize OTEL metrics Proxy');
         router.use(
             '/telemetry/metrics',
             createProxyMiddleware({
-                target: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+                target: config.otel.endpoint,
                 changeOrigin: true,
                 pathRewrite: (path, req) => '/v1/metrics',
             })

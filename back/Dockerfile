@@ -26,4 +26,4 @@ ENV NODE_ENV=production
 
 EXPOSE 80
 
-CMD ["node", "dist/index.cjs"]
+CMD ["node", "--require", "./dist/telemetry.cjs", "dist/index.cjs"]

@@ -5,9 +5,9 @@
     "main": "index.ts",
     "type": "commonjs",
     "scripts": {
-        "dev": "tsx watch src/index.ts",
-        "build": "tsdown src/index.ts --format cjs --clean",
-        "start": "node dist/index.cjs"
+        "dev": "tsx watch --require ./src/telemetry.ts src/index.ts",
+        "build": "tsdown src/index.ts src/telemetry.ts --format cjs --unbundle --clean",
+        "start": "node --require ./dist/telemetry.cjs dist/index.cjs"
     },
     "keywords": [],
     "author": "",

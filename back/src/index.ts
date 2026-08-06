@@ -1,5 +1,4 @@
-import '~/config';
-import '~/services/telemetry';
+import config from '~/config';
 
 import express, { Request, Response } from 'express';
 import cors from 'cors';
@@ -53,7 +52,7 @@ async function bootstrap() {
     app.use(express.json({ limit: '10mb' }));
     app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-    const port = process.env.PORT;
+    const port = config.port;
 
     app.get('/', (req: Request, res: Response) => {
         res.send('Express + TypeScript Server');

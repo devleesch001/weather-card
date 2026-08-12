@@ -6,7 +6,8 @@ import ApiIndex from '~/api/index';
 import MangoDBService from '~/services/MangoDBService';
 import RedisService from '~/services/RedisService';
 import mongoose from 'mongoose';
-import morgan from 'morgan';
+import pinoHttp from 'pino-http';
+import { logger } from '~/services/Logger';
 import TelemetryRoute from '~/api/TelemetryRoute';
 
 function initDatabases() {
@@ -45,7 +46,27 @@ async function bootstrap() {
             exposedHeaders: ['traceparent'],
         })
     );
-    app.use(morgan('combined'));
+    app.use(
+        pinoHttp({
+            logger,
+            customSuccessMessage: (req, res) => {
+                // Récupération des informations standards
+                const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '-';
+                // Date au format ISO (plus standard en JSON que le format CLF de Morgan)
+                const date = new Date().toISOString();
+                const method = req.method;
+                const url = req.url;
+                const httpVersion = req.httpVersion;
+                const status = res.statusCode;
+                const contentLength = res.getHeader('content-length') || '-';
+                const referer = req.headers['referer'] || '-';
+                const userAgent = req.headers['user-agent'] || '-';
+
+                // Reconstitution du format "Combined" de Morgan / Apache
+                return `${ip} - - [${date}] "${method} ${url} HTTP/${httpVersion}" ${status} ${contentLength} "${referer}" "${userAgent}"`;
+            },
+        })
+    );
 
     app.use('/api', TelemetryRoute);
 
